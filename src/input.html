@@ -99,6 +99,10 @@
                     <input class="form-control" id="barcode-price" type="number" placeholder="10000">
                 </div>
                 <div class="col-xs-2">
+                    <label for="margin">Margin (%)</label>
+                    <input class="form-control" oninput="marginKeyInput()" id="margin" type="number" placeholder="10">
+                </div>
+                <div class="col-xs-2">
                     <label for="barcode-sell-price">Harga Jual (Rp)</label>
                     <input class="form-control" id="barcode-sell-price" type="number" placeholder="10000">
                 </div>
@@ -193,6 +197,26 @@
       <!-- /wrapper -->
     </section>
     <!-- /MAIN CONTENT -->
+    <div class="modal fade" id="addproduct-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!--main content end-->
     <!--footer start-->
     <footer class="site-footer">
@@ -218,7 +242,7 @@
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="js/fe-input.js"></script>
   <!--script for this page-->
 </body>

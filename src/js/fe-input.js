@@ -13,4 +13,13 @@ function submitData () {
     var sell_price = $('#barcode-sell-price').val();
     
     console.log(barcode)
+    $('#addproduct-modal').modal('show');
+}
+
+function marginKeyInput () {
+    var basePrice = $('#barcode-price').val()
+    var margin = $('#margin').val()
+    var sellPrice = parseInt(basePrice) + (basePrice * (margin/100))
+    $('#barcode-sell-price').val(sellPrice)
+    /* INSERT TO DATABASE THEN */
 }
