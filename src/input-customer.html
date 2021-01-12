@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="Dashboard">
+  <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+  <title>Dash - Cashier</title>
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Bootstrap core CSS -->
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <!--external css-->
+  <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/style-responsive.css" rel="stylesheet">
+  <link href="css/table-responsive.css" rel="stylesheet">
+  <link href="css/fe-style.css" rel="stylesheet">
+
+  <!-- =======================================================
+    Template Name: Dashio
+    Template URL: https://templatemag.com/dashio-bootstrap-admin-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+  <style>
+      .hide-label {
+          visibility: hidden;
+      }
+
+      .table-label {
+          font-size: large;
+      }
+  </style>
+</head>
+
+<body>
+  <section id="container">
+    <!--header start-->
+    <header class="header black-bg">
+      <div class="sidebar-toggle-box">
+        <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+      </div>
+      <!--logo start-->
+      <a href="index.html" class="logo"><b>DASH<span>Cashier</span></b></a>
+      <!--logo end-->
+    </header>
+    <!--header end-->
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <li class="mt">
+            <a href="index.html">
+              <i class="fa fa-money"></i>
+              <span>Kasir</span>
+              </a>
+          </li>
+          <li>
+            <a href="input.html">
+              <i class="fa fa-check-square-o"></i>
+              <span>Products</span>
+              </a>
+          </li>
+          <li>
+            <a href="input-customer.html">
+              <i class="fa fa-users"></i>
+              <span>Data Customer</span>
+              </a>
+          </li>
+          <!-- <li>
+            <a href="#">
+              <i class="fa fa-truck"></i>
+              <span>Data Supplier</span>
+              </a>
+          </li> -->
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+    <!-- **********************************************************************************************************************************************************
+        MAIN CONTENT
+        *********************************************************************************************************************************************************** -->
+    <!--main content start-->
+    <section id="main-content">
+      <section class="wrapper">
+        <h3><i class="fa fa-angle-right"></i> Toko Bagus</h3>
+        <div class="row mt">
+          <div class="col-lg-12">
+            <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Customer</label>
+                    </div>
+                    <div class="col-md-2 offset-md-8">
+                        <button onclick="newCustomer()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> New Customer</button>
+                    </div>
+                </div>
+                <div class="row" id="new-customer-container">
+                    <div class="col-md-2">
+                        <label for="nama-customer">Nama Customer</label>
+                        <input class="form-control" id="nama-customer" type="text" placeholder="Budi">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="telp-customer">Nomor Telepon</label>
+                        <input class="form-control" id="telp-customer" type="text" placeholder="0812xxxxxxxxx">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="alamat-customer">Alamat</label>
+                        <textarea class="form-control" id="alamat-customer" type="text" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="col-md-1">
+                        <label for="add-customer-button" class="hide-label">a</label>
+                        <button onclick="addCustomer()" id="add-customer-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Save</button>
+                    </div>
+                </div>
+                <div class="row" id="update-customer-container">
+                    <div class="col-md-2">
+                        <label for="nama-customer-update">Nama Customer</label>
+                        <input class="form-control" id="nama-customer-update" type="text" placeholder="Budi">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="telp-customer-update">Nomor Telepon</label>
+                        <input class="form-control" id="telp-customer-update" type="text" placeholder="0812xxxxxxxxx">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="alamat-customer-update">Alamat</label>
+                        <textarea class="form-control" id="alamat-customer-update" type="text" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                    <div class="col-md-1">
+                        <label for="add-customer-button-update" class="hide-label">a</label>
+                        <button onclick="updateCustomer()" id="add-customer-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update</button>
+                    </div>
+                </div>
+                <section id="unseen">
+                    <table id="table-customer" class="table table-bordered table-striped table-condensed">
+                    <thead>
+                        <tr>
+                        <th>Nama Customer</th>
+                        <th class="numeric">Nomor Telepon</th>
+                        <th>Alamat</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-customer-tbody">
+                        <tr>
+                        <td>Diastowo Faryduana</td>
+                        <td>081294059775</td>
+                        <td>Perumahan Bilabong Permai, Blok C1F Nomor 21, RT 01/17, Jalan Rajawali 4, Bogor</td>
+                        <td>
+                            <button onclick="deleteThisCustomer()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                            <button onclick="updateThisCustomer()" class="btn btn-info"><i class="fa fa-edit"></i></button>
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </section>
+                </div>
+            </div>
+            <!-- /content-panel -->
+          </div>
+          <!-- /col-lg-4 -->
+        </div>
+        <!-- /row -->
+      </section>
+      <!-- /wrapper -->
+    </section>
+    <!-- /MAIN CONTENT -->
+    <!--main content end-->
+    <!--footer start-->
+    <footer class="site-footer">
+      <div class="text-center">
+        <p>
+          &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
+        </p>
+        <div class="credits">
+          <!--
+            You are NOT allowed to delete the credit link to TemplateMag with free version.
+            You can delete the credit link only if you bought the pro version.
+            Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/dashio-bootstrap-admin-template/
+            Licensing information: https://templatemag.com/license/
+          -->
+          Created with Dashio template by <a href="https://templatemag.com/">TemplateMag</a>
+        </div>
+        <a href="responsive_table.html#" class="go-top">
+          <i class="fa fa-angle-up"></i>
+          </a>
+      </div>
+    </footer>
+    <!--footer end-->
+  </section>
+  <script src="js/fe-input-customer.js"></script>
+  <!--script for this page-->
+</body>
+
+</html>
