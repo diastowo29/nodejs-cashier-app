@@ -14,7 +14,10 @@
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- js placed at the end of the document so the pages load faster -->
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <!--external css-->
   <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <!-- Custom styles for this template -->
@@ -22,6 +25,12 @@
   <link href="css/style-responsive.css" rel="stylesheet">
   <link href="css/table-responsive.css" rel="stylesheet">
   <link href="css/fe-style.css" rel="stylesheet">
+  <script>
+    var $ = jQuery = require("jquery")
+    $(function(){
+      $("#includedContent").load("navbar.html"); 
+    });
+  </script>
 
   <!-- =======================================================
     Template Name: Dashio
@@ -45,24 +54,7 @@
     <!--header end-->
     <!--sidebar start-->
     <aside>
-      <div id="sidebar" class="nav-collapse ">
-        <!-- sidebar menu start-->
-        <ul class="sidebar-menu" id="nav-accordion">
-          <li class="mt">
-            <a href="index.html">
-              <i class="fa fa-money"></i>
-              <span>Kasir</span>
-              </a>
-          </li>
-          <li>
-            <a href="input.html">
-              <i class="fa fa-check-square-o"></i>
-              <span>Input Database</span>
-              </a>
-          </li>
-        </ul>
-        <!-- sidebar menu end-->
-      </div>
+      <div id="includedContent"></div>
     </aside>
     <!--sidebar end-->
     <!-- **********************************************************************************************************************************************************

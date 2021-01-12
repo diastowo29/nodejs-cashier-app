@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize')
 const itemModel = require('./models/item-data')
 const customerModel = require('./models/customer-data')
+const supplierModel = require('./models/supplier-data')
 
 var sequelize_db;
 
@@ -26,6 +27,7 @@ if (process.env.DATABASE_URL === undefined) {
 
 const itemTabel = itemModel(sequelize_db, Sequelize)
 const customerTabel = customerModel(sequelize_db, Sequelize)
+const supplierTabel = supplierModel(sequelize_db, Sequelize)
 
 sequelize_db.sync()
   .then(() => {
@@ -34,5 +36,6 @@ sequelize_db.sync()
 
 module.exports = {
 	itemTabel,
-	customerTabel
+	customerTabel,
+	supplierTabel
 }

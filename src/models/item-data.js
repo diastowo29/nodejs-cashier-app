@@ -8,6 +8,7 @@ module.exports = (sequelize, type) => {
         barcode: type.STRING(100),
         nama_barang: type.STRING(100),
         harga: type.INTEGER,
+        margin: type.INTEGER,
         harga_jual: type.INTEGER,
         stock: type.INTEGER
     });

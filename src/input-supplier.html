@@ -78,96 +78,66 @@
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
                 <div class="row">
                     <div class="col-md-2">
-                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Product</label>
+                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Supplier</label>
                     </div>
                     <div class="col-md-2 offset-md-8">
-                        <button onclick="newProduct()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> New Product</button>
+                        <button onclick="newSupplier()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> New Supplier</button>
                     </div>
                 </div>
                 <div class="row" id="new-supplier-container">
                     <div class="col-md-2">
-                        <label for="barcode-product">Barcode</label>
-                        <input class="form-control" id="barcode-product" type="text" placeholder="7723484534">
+                        <label for="nama-supplier">Nama Supplier</label>
+                        <input class="form-control" id="nama-supplier" type="text" placeholder="Budi Supplies">
                     </div>
                     <div class="col-md-2">
-                        <label for="nama-product">Product Name</label>
-                        <input class="form-control" id="nama-product" type="text" placeholder="Kerupuk">
+                        <label for="item-supplier">Item</label>
+                        <input class="form-control" id="item-supplier" type="text" placeholder="Kerupuk">
                     </div>
                     <div class="col-md-2">
-                        <label for="harga-product">Price (Rp)</label>
-                        <input class="form-control" id="harga-product" type="text" placeholder="10000">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="margin-product">Margin (%)</label>
-                        <input class="form-control" oninput="marginKeyInput()" id="margin-product" type="number" placeholder="10">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="harga-jual-product">Sell Price (Rp)</label>
-                        <input class="form-control" oninput="sellKeyInput()" id="harga-jual-product" type="text" placeholder="12000">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="stock-product">Stock</label>
-                        <input class="form-control" id="stock-product" type="number" placeholder="99">
+                        <label for="telp-supplier">Telp</label>
+                        <input class="form-control" id="telp-supplier" type="text" placeholder="08129xxxxxxx">
                     </div>
                     <div class="col-md-2 col-s-2 col-xs-2">
-                        <label for="add-product-button" class="hide-label">a</label>
-                        <button onclick="addProduct()" id="add-product-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Save</button>
+                        <label for="add-supplier-button" class="hide-label">a</label>
+                        <button onclick="addSupplier()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Save</button>
                     </div>
                 </div>
                 <div class="row" id="update-supplier-container">
-                  <div class="col-md-2">
-                      <label for="barcode-product-update">Barcode</label>
-                      <input class="form-control" id="barcode-product-update" type="text" placeholder="7723484534">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="nama-product-update">Product Name</label>
-                      <input class="form-control" id="nama-product-update" type="text" placeholder="Kerupuk">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="harga-product-update">Price (Rp)</label>
-                      <input class="form-control" id="harga-product-update" type="text" placeholder="10000">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="margin-product-update">Margin (%)</label>
-                      <input class="form-control" id="margin-product-update" type="number" placeholder="10">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="harga-jual-product-update">Sell Price (Rp)</label>
-                      <input class="form-control" id="harga-jual-product-update" type="text" placeholder="12000">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="stock-product-update">Stock</label>
-                      <input class="form-control" id="stock-product-update" type="number" placeholder="99">
-                  </div>
                     <div class="col-md-2">
-                        <label for="add-product-button-update" class="hide-label">a</label>
-                        <button onclick="updateProduct()" id="add-product-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update</button>
+                        <label for="nama-supplier-update">Nama Supplier</label>
+                        <input class="form-control" id="nama-supplier-update" type="text" placeholder="Budi Supplies">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="item-supplier-update">Item</label>
+                        <input class="form-control" id="item-supplier-update" type="text" placeholder="Kerupuk">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="telp-supplier-update">Telp</label>
+                        <input class="form-control" id="telp-supplier-update" type="text" placeholder="08129xxxxxxx">
+                    </div>
+                    <div class="col-md-1">
+                        <label for="add-supplier-button-update" class="hide-label">a</label>
+                        <button onclick="updateSupplier()" id="add-supplier-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update</button>
                     </div>
                 </div>
                 <section id="unseen">
-                    <table id="table-product" class="table table-bordered table-striped table-condensed">
+                    <table id="table-supplier" class="table table-bordered table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Barcode</th>
-                            <th>Nama Product</th>
-                            <th>Price (Rp)</th>
-                            <th>Margin (%)</th>
-                            <th>Sell Price (Rp)</th>
-                            <th>Stock</th>
+                            <th>Nama Supplier</th>
+                            <th>Item</th>
+                            <th>Telepon</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody id="table-product-tbody">
+                    <tbody id="table-supplier-tbody">
                         <tr>
-                            <td>993242340234123</td>
+                            <td>Supplier Kerupuk</td>
                             <td>Kerupuk</td>
-                            <td>10000</td>
-                            <td>20</td>
-                            <td>12000</td>
-                            <td>12</td>
+                            <td>08128379287</td>
                             <td>
-                                <button onclick="deleteThisProduct()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                                <button onclick="updateThisProduct()" class="btn btn-info"><i class="fa fa-edit"></i></button>
+                                <button onclick="deleteThisSupplier()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                <button onclick="updateThisSupplier()" class="btn btn-info"><i class="fa fa-edit"></i></button>
                             </td>
                         </tr>
                     </tbody>
@@ -207,7 +177,7 @@
     </footer>
     <!--footer end-->
   </section>
-  <script src="js/fe-input.js"></script>
+  <script src="js/fe-input-supplier.js"></script>
   <!--script for this page-->
 </body>
 

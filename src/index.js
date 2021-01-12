@@ -3,7 +3,7 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { itemTabel, customerTabel }= require('./sequelize');
+const { itemTabel, customerTabel, supplierTabel }= require('./sequelize');
 
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
@@ -26,6 +26,7 @@ const createWindow = () => {
     }
   });
   mainWindow.setMenuBarVisibility(false);
+  mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
@@ -59,6 +60,14 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+/* CUSTOMER AREA */
+
+ipcMain.on('get-all-customer', async function(event, data) {
+  customerTabel.findAll().then(all_customer => {
+    mainWindow.webContents.send('all-customer', all_customer);
+  })
+});
+
 ipcMain.on('add-customer', async function(event, data) {
   customerTabel.create(data).then(created_customer => {
     mainWindow.webContents.send('add-customer', created_customer);
@@ -86,9 +95,71 @@ ipcMain.on('update-customer', async function(event, data, id) {
   })
 });
 
-ipcMain.on('get-all-customer', async function(event, data) {
-  customerTabel.findAll().then(all_customer => {
-    mainWindow.webContents.send('all-customer', all_customer);
+/* SUPPLIER AREA */
+ipcMain.on('get-all-supplier', async function(event, data) {
+  supplierTabel.findAll().then(all_supplier => {
+    mainWindow.webContents.send('all-supplier', all_supplier);
+  })
+});
+
+
+ipcMain.on('add-supplier', async function(event, data) {
+  supplierTabel.create(data).then(created_supplier => {
+    mainWindow.webContents.send('add-supplier', created_supplier);
+  })
+});
+
+ipcMain.on('delete-supplier', async function(event, id) {
+  supplierTabel.destroy({
+    where: {
+      id: id
+    }
+  }).then(deleted_supplier => {
+    mainWindow.webContents.send('delete-supplier', deleted_supplier);
+  })
+});
+
+ipcMain.on('update-supplier', async function(event, data, id) {
+  console.log(id)
+  supplierTabel.update(data,{
+    where: {
+      id: id
+    }
+  }).then(updated_supplier => {
+    mainWindow.webContents.send('update-supplier', updated_supplier);
+  })
+});
+
+/* PRODUCT AREA */
+ipcMain.on('add-product', async function(event, data) {
+  itemTabel.create(data).then(created_product => {
+    mainWindow.webContents.send('add-product', created_product);
+  })
+});
+
+ipcMain.on('get-all-product', async function(event, data) {
+  itemTabel.findAll().then(all_product => {
+    mainWindow.webContents.send('all-product', all_product);
+  })
+});
+
+ipcMain.on('update-product', async function(event, data, id) {
+  itemTabel.update(data,{
+    where: {
+      id: id
+    }
+  }).then(updated_product => {
+    mainWindow.webContents.send('update-product', updated_product);
+  })
+});
+
+ipcMain.on('delete-product', async function(event, id) {
+  itemTabel.destroy({
+    where: {
+      id: id
+    }
+  }).then(deleted_product => {
+    mainWindow.webContents.send('update-product', deleted_product);
   })
 });
 
