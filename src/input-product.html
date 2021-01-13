@@ -40,6 +40,10 @@
       .table-label {
           font-size: large;
       }
+
+      #table-product {
+        margin-top: 10px;
+      }
   </style>
   <script>
     var $ = jQuery = require("jquery")
@@ -72,84 +76,59 @@
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
-        <h3><i class="fa fa-angle-right"></i> Toko Bagus</h3>
+        <h3><i class="fa fa-angle-right"></i> PRISMART</h3>
         <div class="row mt">
-          <div class="col-lg-12">
+          <div class="col-lg-4" id="new-panel">
+            <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
+              <div class="row">
+                <div class="col-md-4">
+                  <label class="table-label"><i class="fa fa-angle-right"></i> Input Produk</label>
+                </div>
+                <div class="row" id="new-supplier-container">
+                  <div class="col-md-12">
+                      <label for="barcode-product">Barcode</label>
+                      <input class="form-control" id="barcode-product" type="text" placeholder="7723484534">
+                  </div>
+                  <div class="col-md-12">
+                      <label for="nama-product">Product Name</label>
+                      <input class="form-control" id="nama-product" type="text" placeholder="Kerupuk">
+                  </div>
+                  <div class="col-md-4">
+                      <label for="harga-product">Price (Rp)</label>
+                      <input class="form-control" id="harga-product" type="text" placeholder="10000">
+                  </div>
+                  <div class="col-md-4">
+                      <label for="margin-product">Margin (%)</label>
+                      <input class="form-control" oninput="marginKeyInput()" id="margin-product" type="number" placeholder="10">
+                  </div>
+                  <div class="col-md-4">
+                      <label for="harga-jual-product">Sell Price (Rp)</label>
+                      <input class="form-control" oninput="sellKeyInput()" id="harga-jual-product" type="text" placeholder="12000">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="stock-product">Stock</label>
+                      <input class="form-control" id="stock-product" type="number" placeholder="99">
+                  </div>
+                  <div class="col-md-6">
+                      <label for="diskon-product">Diskon (Rp)</label>
+                      <input class="form-control" id="diskon-product" type="text" placeholder="2000">
+                  </div>
+                  <div class="col-md-4">
+                      <label for="add-product-button" class="hide-label">a</label>
+                      <button onclick="addProduct()" id="add-product-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Simpan Produk Baru</button>
+                  </div>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
                 <div class="row">
                     <div class="col-md-2">
-                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Product</label>
+                        <label class="table-label"><i class="fa fa-angle-right"></i> Daftar Produk</label>
                     </div>
                     <div class="col-md-2 offset-md-8">
-                        <button onclick="newProduct()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> New Product</button>
-                    </div>
-                </div>
-                <div class="row" id="new-supplier-container">
-                    <div class="col-md-2">
-                        <label for="barcode-product">Barcode</label>
-                        <input class="form-control" id="barcode-product" type="text" placeholder="7723484534">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="nama-product">Product Name</label>
-                        <input class="form-control" id="nama-product" type="text" placeholder="Kerupuk">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="harga-product">Price (Rp)</label>
-                        <input class="form-control" id="harga-product" type="text" placeholder="10000">
-                    </div>
-                    <div class="col-md-1">
-                        <label for="margin-product">Margin (%)</label>
-                        <input class="form-control" oninput="marginKeyInput()" id="margin-product" type="number" placeholder="10">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="harga-jual-product">Sell Price (Rp)</label>
-                        <input class="form-control" oninput="sellKeyInput()" id="harga-jual-product" type="text" placeholder="12000">
-                    </div>
-                    <div class="col-md-1">
-                        <label for="stock-product">Stock</label>
-                        <input class="form-control" id="stock-product" type="number" placeholder="99">
-                    </div>
-                    <div class="col-md-2">
-                        <label for="diskon-product">Diskon (Rp)</label>
-                        <input class="form-control" id="diskon-product" type="text" placeholder="2000">
-                    </div>
-                    <div class="col-md-2 col-s-2 col-xs-2">
-                        <label for="add-product-button" class="hide-label">a</label>
-                        <button onclick="addProduct()" id="add-product-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Save</button>
-                    </div>
-                </div>
-                <div class="row" id="update-supplier-container">
-                  <div class="col-md-2">
-                      <label for="barcode-product-update">Barcode</label>
-                      <input class="form-control" id="barcode-product-update" type="text" placeholder="7723484534">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="nama-product-update">Product Name</label>
-                      <input class="form-control" id="nama-product-update" type="text" placeholder="Kerupuk">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="harga-product-update">Price (Rp)</label>
-                      <input class="form-control" oninput="priceUpdateKeyInput()" id="harga-product-update" type="text" placeholder="10000">
-                  </div>
-                  <div class="col-md-1">
-                      <label for="margin-product-update">Margin (%)</label>
-                      <input class="form-control" oninput="marginUpdateKeyInput()" id="margin-product-update" type="number" placeholder="10">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="harga-jual-product-update">Sell Price (Rp)</label>
-                      <input class="form-control" oninput="sellKeyUpdateInput()" id="harga-jual-product-update" type="text" placeholder="12000">
-                  </div>
-                  <div class="col-md-1">
-                      <label for="stock-product-update">Stock</label>
-                      <input class="form-control" id="stock-product-update" type="number" placeholder="99">
-                  </div>
-                  <div class="col-md-2">
-                      <label for="diskon-product-update">Diskon (Rp)</label>
-                      <input class="form-control" id="diskon-product-update" type="text" placeholder="2000">
-                  </div>
-                    <div class="col-md-2">
-                        <label for="add-product-button-update" class="hide-label">a</label>
-                        <button onclick="updateProduct()" id="add-product-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update</button>
+                        <button onclick="newProduct()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> Produk Baru</button>
                     </div>
                 </div>
                 <section id="unseen">
@@ -157,12 +136,12 @@
                     <thead>
                         <tr>
                             <th>Barcode</th>
-                            <th>Nama Product</th>
-                            <th>Price (Rp)</th>
+                            <th>Nama Produk</th>
+                            <th>Harga (Rp)</th>
                             <th>Margin (%)</th>
-                            <th>Sell Price (Rp)</th>
+                            <th>Harga Jual (Rp)</th>
                             <th>Diskon</th>
-                            <th>Stock</th>
+                            <th>Stok</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -182,7 +161,50 @@
                     </tbody>
                     </table>
                 </section>
+              </div>
+            </div>
+            <div class="col-lg-4" id="update-panel">
+              <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
+                <div class="row">
+                  <div class="col-md-4">
+                    <label class="table-label"><i class="fa fa-angle-right"></i> Update Produk</label>
+                  </div>
+                  <div class="row" id="update-supplier-container">
+                    <div class="col-md-12">
+                        <label for="barcode-product-update">Barcode</label>
+                        <input class="form-control" id="barcode-product-update" type="text" placeholder="7723484534">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="nama-product-update">Product Name</label>
+                        <input class="form-control" id="nama-product-update" type="text" placeholder="Kerupuk">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="harga-product-update">Price (Rp)</label>
+                        <input class="form-control" oninput="priceUpdateKeyInput()" id="harga-product-update" type="text" placeholder="10000">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="margin-product-update">Margin (%)</label>
+                        <input class="form-control" oninput="marginUpdateKeyInput()" id="margin-product-update" type="number" placeholder="10">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="harga-jual-product-update">Sell Price (Rp)</label>
+                        <input class="form-control" oninput="sellKeyUpdateInput()" id="harga-jual-product-update" type="text" placeholder="12000">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="stock-product-update">Stock</label>
+                        <input class="form-control" id="stock-product-update" type="number" placeholder="99">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="diskon-product-update">Diskon (Rp)</label>
+                        <input class="form-control" id="diskon-product-update" type="text" placeholder="2000">
+                    </div>
+                      <div class="col-md-4">
+                          <label for="add-product-button-update" class="hide-label">a</label>
+                          <button onclick="updateProduct()" id="add-product-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update Produk</button>
+                      </div>
+                  </div>
                 </div>
+              </div>
             </div>
             <!-- /content-panel -->
           </div>

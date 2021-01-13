@@ -11,7 +11,7 @@ module.exports = (sequelize, type) => {
         margin: type.INTEGER,
         qty: type.INTEGER,
         total: type.INTEGER,
-        pambayaran: type.INTEGER,
+        pembayaran: type.INTEGER,
         trx_date: type.STRING(50),
     });
 }

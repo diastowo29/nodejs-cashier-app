@@ -19,7 +19,8 @@ function submitData () {
 }
 
 function newProduct () {
-
+    $('#update-panel').hide();
+    $('#new-panel').show();
 }
 
 function addProduct () {
@@ -86,6 +87,10 @@ function deleteThisProduct (id) {
 
 
 function updateThisProduct (id) {
+    
+    $('#update-panel').show();
+    $('#new-panel').hide();
+
     var barcode = $('#table-product #row_barcode_' + id).text();
     var nama_barang = $('#table-product #row_nama_' + id).text();
     var harga = $('#table-product #row_harga_' + id).text();
@@ -151,13 +156,14 @@ function generateRow (data) {
     <td id="row_stock_` + data.dataValues.id + `">` + data.dataValues.stock + `</td>
     <td>
         <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-        <button onclick="updateThisProduct(` + data.dataValues.id + `)" class="btn btn-info"><i class="fa fa-edit"></i></button>
+        <button onclick="updateThisProduct(` + data.dataValues.id + `)" class="btn btn-warning"><i class="fa fa-edit"></i></button>
     </td>
     <tr>`
     return newRow;
 }
 
 function getAllProduct () {
+    $('#update-panel').hide();
     $("#table-product-tbody").empty();
     ipcRenderer.send('get-all-product', true);
 }

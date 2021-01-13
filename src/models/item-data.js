@@ -9,7 +9,7 @@ module.exports = (sequelize, type) => {
         nama_barang: type.STRING(100),
         harga: type.INTEGER,
         diskon: type.INTEGER,
-        margin: type.INTEGER,
+        margin: type.FLOAT,
         harga_jual: type.INTEGER,
         stock: type.INTEGER
     });
