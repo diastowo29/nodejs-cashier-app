@@ -3,7 +3,7 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { itemTabel, customerTabel, supplierTabel }= require('./sequelize');
+const { itemTabel, customerTabel, supplierTabel, trxTabel }= require('./sequelize');
 
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
@@ -29,7 +29,7 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadFile(path.join(__dirname, 'cashier.html'));
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
@@ -161,6 +161,35 @@ ipcMain.on('delete-product', async function(event, id) {
   }).then(deleted_product => {
     mainWindow.webContents.send('update-product', deleted_product);
   })
+});
+
+ipcMain.on('get-product', async function(event, data) {
+  itemTabel.findOne({
+    where: {
+      barcode: data
+    }
+  }).then(product => {
+    mainWindow.webContents.send('get-product', product);
+  })
+});
+
+ipcMain.on('get-many-product', async function(event, data) {
+  itemTabel.findAll({
+    where: {
+      barcode: data
+    }
+  }).then(product => {
+    mainWindow.webContents.send('get-many-product', product);
+  })
+});
+
+/* TRX AREA */
+ipcMain.on('create-trx', async function(event, data) {
+  data.forEach(trx => {
+    trxTabel.create(trx).then(created_trx => {
+      mainWindow.webContents.send('create-trx', created_trx);
+    })
+  });
 });
 
 ipcMain.on('do_print', async function(event, data) {

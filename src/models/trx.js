@@ -1,16 +1,17 @@
 module.exports = (sequelize, type) => {
-    return sequelize.define('item-data', {
+    return sequelize.define('trx-data', {
         id: {
           type: type.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
         barcode: type.STRING(100),
-        nama_barang: type.STRING(100),
         harga: type.INTEGER,
         diskon: type.INTEGER,
         margin: type.INTEGER,
-        harga_jual: type.INTEGER,
-        stock: type.INTEGER
+        qty: type.INTEGER,
+        total: type.INTEGER,
+        pambayaran: type.INTEGER,
+        trx_date: type.STRING(50),
     });
 }

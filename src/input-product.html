@@ -97,7 +97,7 @@
                         <label for="harga-product">Price (Rp)</label>
                         <input class="form-control" id="harga-product" type="text" placeholder="10000">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <label for="margin-product">Margin (%)</label>
                         <input class="form-control" oninput="marginKeyInput()" id="margin-product" type="number" placeholder="10">
                     </div>
@@ -105,9 +105,13 @@
                         <label for="harga-jual-product">Sell Price (Rp)</label>
                         <input class="form-control" oninput="sellKeyInput()" id="harga-jual-product" type="text" placeholder="12000">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <label for="stock-product">Stock</label>
                         <input class="form-control" id="stock-product" type="number" placeholder="99">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="diskon-product">Diskon (Rp)</label>
+                        <input class="form-control" id="diskon-product" type="text" placeholder="2000">
                     </div>
                     <div class="col-md-2 col-s-2 col-xs-2">
                         <label for="add-product-button" class="hide-label">a</label>
@@ -125,19 +129,23 @@
                   </div>
                   <div class="col-md-2">
                       <label for="harga-product-update">Price (Rp)</label>
-                      <input class="form-control" id="harga-product-update" type="text" placeholder="10000">
+                      <input class="form-control" oninput="priceUpdateKeyInput()" id="harga-product-update" type="text" placeholder="10000">
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                       <label for="margin-product-update">Margin (%)</label>
-                      <input class="form-control" id="margin-product-update" type="number" placeholder="10">
+                      <input class="form-control" oninput="marginUpdateKeyInput()" id="margin-product-update" type="number" placeholder="10">
                   </div>
                   <div class="col-md-2">
                       <label for="harga-jual-product-update">Sell Price (Rp)</label>
-                      <input class="form-control" id="harga-jual-product-update" type="text" placeholder="12000">
+                      <input class="form-control" oninput="sellKeyUpdateInput()" id="harga-jual-product-update" type="text" placeholder="12000">
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-1">
                       <label for="stock-product-update">Stock</label>
                       <input class="form-control" id="stock-product-update" type="number" placeholder="99">
+                  </div>
+                  <div class="col-md-2">
+                      <label for="diskon-product-update">Diskon (Rp)</label>
+                      <input class="form-control" id="diskon-product-update" type="text" placeholder="2000">
                   </div>
                     <div class="col-md-2">
                         <label for="add-product-button-update" class="hide-label">a</label>
@@ -153,6 +161,7 @@
                             <th>Price (Rp)</th>
                             <th>Margin (%)</th>
                             <th>Sell Price (Rp)</th>
+                            <th>Diskon</th>
                             <th>Stock</th>
                             <th>Action</th>
                         </tr>
@@ -207,7 +216,7 @@
     </footer>
     <!--footer end-->
   </section>
-  <script src="js/fe-input.js"></script>
+  <script src="js/fe-input-product.js"></script>
   <!--script for this page-->
 </body>
 

@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const itemModel = require('./models/item-data')
 const customerModel = require('./models/customer-data')
 const supplierModel = require('./models/supplier-data')
+const trxModel = require('./models/trx')
 
 var sequelize_db;
 
@@ -28,8 +29,9 @@ if (process.env.DATABASE_URL === undefined) {
 const itemTabel = itemModel(sequelize_db, Sequelize)
 const customerTabel = customerModel(sequelize_db, Sequelize)
 const supplierTabel = supplierModel(sequelize_db, Sequelize)
+const trxTabel = trxModel(sequelize_db, Sequelize)
 
-sequelize_db.sync()
+sequelize_db.sync({ alter: true })
   .then(() => {
     console.log(`Database & tables created!`)
     })
@@ -37,5 +39,6 @@ sequelize_db.sync()
 module.exports = {
 	itemTabel,
 	customerTabel,
-	supplierTabel
+	supplierTabel,
+	trxTabel
 }
