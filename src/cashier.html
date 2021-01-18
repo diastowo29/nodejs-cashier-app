@@ -31,6 +31,12 @@
       $("#includedContent").load("navbar.html"); 
     });
   </script>
+  <style>
+    
+    .hide-label {
+          visibility: hidden;
+      }
+  </style>
 
   <!-- =======================================================
     Template Name: Dashio
@@ -48,7 +54,7 @@
         <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
       </div>
       <!--logo start-->
-      <a href="index.html" class="logo"><b>DASH<span>Cashier</span></b></a>
+      <a href="index.html" class="logo"><b>PRIS<span>MART</span></b></a>
       <!--logo end-->
     </header>
     <!--header end-->
@@ -63,8 +69,23 @@
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
-        <h3><i class="fa fa-angle-right"></i> PRISMART</h3>
         <div class="row mt">
+          <!-- <div class="col-lg-4">
+            <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
+              <div class="col-md-12">
+                  <label for="nama-customer">Nama Customer</label>
+                  <input class="form-control" id="nama-customer" type="text" placeholder="Budi">
+              </div>
+              <div class="col-md-12">
+                  <label for="telp-customer">Nomor Telepon</label>
+                  <input class="form-control" id="telp-customer" type="text" placeholder="0812xxxxxxxxx">
+              </div>
+              <div class="col-md-12">
+                  <label for="alamat-customer">Alamat</label>
+                  <textarea class="form-control" id="alamat-customer" type="text" placeholder="Alamat lengkap"></textarea>
+              </div>
+            </div>
+          </div> -->
           <div class="col-lg-12">
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
               <h4><i class="fa fa-angle-right"></i> Transaksi</h4>
@@ -74,7 +95,7 @@
                   <input class="form-control" id="barcode-input" onchange="barcodeChange()" type="text" placeholder="1234567890">
                 </div>
               </div>
-              <section id="unseen">
+              <section id="unseen" style="margin-top: 10px;">
                 <table id="table-trx" class="table table-bordered table-striped table-condensed">
                   <thead>
                     <tr>
@@ -94,20 +115,32 @@
                   </tbody>
                 </table>
                 
-                <table class="table table-bordered table-striped table-condensed">
-                  <tr>
-                    <td class="numeric" colspan="5"><b>Total</b></td>
-                    <td class="numeric" id="totalCell">Rp 0</td>
-                  </tr>
-                  <tr>
-                    <td class="numeric" colspan="5"><b>Pembayaran</b></td>
-                    <td class="numeric">Rp <input id="rupiah" class="form-control" oninput="rupiahInput()" type="number"/></td>
-                  </tr>
-                  <tr>
-                    <td class="numeric" colspan="5"><b>Kembalian</b></td>
-                    <td class="numeric" id="changeRupiah">Rp 0</td>
-                  </tr>
-                </table>
+                <div>
+
+                  <table class="table table-bordered table-striped table-condensed col-lg-3 offset-lg-8" style="max-width: 30%;">
+                    <tr>
+                      <td class="numeric" colspan="5"><b>Total</b></td>
+                      <td class="numeric" id="totalCell">Rp 0</td>
+                    </tr>
+                    <tr>
+                      <td class="numeric" colspan="5"><b>Pembayaran (Rp)</b></td>
+                      <td>
+                        <div class="col-md-12"><input id="payment-input" oninput="rupiahInput()" class="form-control" type="number"></div>
+                        <!-- <form class="form-inline">
+                          <label for="rg-from">Ab: </label>
+                          <div class="form-group">
+                            <input type="text" id="rg-from" name="rg-from" value="" class="form-control">
+                          </div>
+                          <!-- rest of form
+                        </form> -->
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="numeric" colspan="5"><b>Kembalian</b></td>
+                      <td class="numeric" id="changeRupiah">Rp 0</td>
+                    </tr>
+                  </table>
+                </div>
                 <div class="row offset-md-10" style="padding-left: 10px;">
                   <div class="col-md-6">
                     <button onclick="doReset()" id="add-customer-button-update" class="form-control btn btn-danger"><i class="fa fa-refresh "></i> Reset</button>

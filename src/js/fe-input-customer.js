@@ -6,8 +6,8 @@ var $ = jQuery = require("jquery")
 getAllCustomer()
 
 function newCustomer () {
-    $('#new-customer-container').show()
-    $('#update-customer-container').hide()
+    $('#new-panel').show()
+    $('#update-panel').hide()
 }
 
 function updateCustomer (id) {
@@ -51,13 +51,12 @@ function deleteThisCustomer (id) {
 }
 
 ipcRenderer.on('delete-customer', function (event, customer) {
-    console.log('delete')
     getAllCustomer();
 });
 
 function updateThisCustomer (id) {
-    $('#new-customer-container').hide()
-    $('#update-customer-container').show()
+    $('#new-panel').hide()
+    $('#update-panel').show()
     var nama = $('#table-customer #row_nama_' + id).text();
     var alamat = $('#table-customer #row_alamat_' + id).text();
     var telp = $('#table-customer #row_telp_' + id).text();
@@ -69,8 +68,8 @@ function updateThisCustomer (id) {
 
 function getAllCustomer () {
     $("#table-customer-tbody").empty();
-    $('#new-customer-container').hide()
-    $('#update-customer-container').hide()
+    $('#new-panel').show()
+    $('#update-panel').hide()
     ipcRenderer.send('get-all-customer', true);
 }
 

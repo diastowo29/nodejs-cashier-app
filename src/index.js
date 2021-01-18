@@ -192,6 +192,36 @@ ipcMain.on('create-trx', async function(event, data) {
   });
 });
 
+ipcMain.on('get-all-trx', async function(event, data) {
+  trxTabel.findAll().then(trxs => {
+    mainWindow.webContents.send('get-all-trx', trxs);
+  })
+});
+
+ipcMain.on('search-trx-daily', async function(event, data) {
+  trxTabel.findAll({
+    where: {
+      trx_date: data
+    }
+  }).then(trxs => {
+    mainWindow.webContents.send('search-trx', trxs);
+  })
+});
+
+ipcMain.on('search-trx-wild', async function(event, data) {
+  trxTabel.findAll({
+    where: {
+      trx_date: {
+        [Op.like]: data
+      } 
+    }
+  }).then(trxs => {
+    mainWindow.webContents.send('search-trx', trxs);
+  })
+});
+
+
+
 ipcMain.on('do_print', async function(event, data) {
   console.log('helo')
   const device  = new escpos.USB();

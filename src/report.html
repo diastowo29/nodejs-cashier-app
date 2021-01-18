@@ -78,44 +78,58 @@
         <div class="row mt">
           <div class="col-lg-4" id="new-panel">
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
-              <div class="row" id="new-supplier-container">
+              <div class="row" id="filter-container">
                 <div class="col-md-12">
-                    <label for="nama-supplier">Nama Supplier</label>
-                    <input class="form-control" id="nama-supplier" type="text" placeholder="Budi Supplies">
+                  <a href="#" onclick="filterHarian()" class="table-label"><i class="fa fa-angle-right"></i> Filter Harian</a>
                 </div>
+                <div class="row" id="filter-harian-panel">
+                    <div class="col-md-12">
+                        <label for="tanggal-daily-filter">Tanggal</label>
+                        <input class="form-control" id="tanggal-daily-filter" type="date" placeholder="30">
+                    </div>
+                </div>
+
                 <div class="col-md-12">
-                    <label for="item-supplier">Item</label>
-                    <input class="form-control" id="item-supplier" type="text" placeholder="Kerupuk">
+                    <a onclick="filterBulanan()" href="#"class="table-label"><i class="fa fa-angle-right"></i> Filter Bulanan</a>
                 </div>
+                <div class="row" id="filter-bulanan-panel">
+                    <div class="col-md-6">
+                        <label for="bulan-monthly-filter">Bulan</label>
+                        <input class="form-control" id="bulan-monthly-filter" type="number" placeholder="12">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tahun-monthly-filter">Tahun</label>
+                        <input class="form-control" id="tahun-monthly-filter" type="number" placeholder="2020">
+                    </div>
+                </div>
+
                 <div class="col-md-12">
-                    <label for="telp-supplier">Telp</label>
-                    <input class="form-control" id="telp-supplier" type="text" placeholder="08129xxxxxxx">
+                    <a onclick="filterTahunan()" href="#" class="table-label"><i class="fa fa-angle-right"></i> Filter Tahunan</a>
                 </div>
+                <div class="row" id="filter-tahunan-panel">
+                    <div class="col-md-12">
+                        <label for="tahun-annualy-filter">Tahun</label>
+                        <input class="form-control" id="tahun-annualy-filter" type="number" placeholder="2020">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <a onclick="filterAdvance()" href="#" class="table-label"><i class="fa fa-angle-right"></i> Advance</a>
+                </div>
+                <div class="row" id="filter-advance-panel">
+                    <div class="col-md-6">
+                        <label for="range1-filter">Dari</label>
+                        <input class="form-control" id="range1-filter" type="date" placeholder="02/12/2020">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="range2-filter">Sampai</label>
+                        <input class="form-control" id="range2-filter" type="date" placeholder="02/12/2021">
+                    </div>
+                </div>
+
                 <div class="col-md-4">
                     <label for="add-supplier-button" class="hide-label">a</label>
-                    <button onclick="addSupplier()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Simpan Supplier Baru</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4" id="update-panel">
-            <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
-              <div class="row" id="update-supplier-container">
-                <div class="col-md-12">
-                    <label for="nama-supplier-update">Nama Supplier</label>
-                    <input class="form-control" id="nama-supplier-update" type="text" placeholder="Budi Supplies">
-                </div>
-                <div class="col-md-12">
-                    <label for="item-supplier-update">Item</label>
-                    <input class="form-control" id="item-supplier-update" type="text" placeholder="Kerupuk">
-                </div>
-                <div class="col-md-12">
-                    <label for="telp-supplier-update">Telp</label>
-                    <input class="form-control" id="telp-supplier-update" type="text" placeholder="08129xxxxxxx">
-                </div>
-                <div class="col-md-4">
-                    <label for="add-supplier-button-update" class="hide-label">a</label>
-                    <button onclick="updateSupplier()" id="add-supplier-button-update" class="form-control btn btn-success"><i class="fa fa-edit "></i> Update Supplier</button>
+                    <button onclick="doFilter()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Apply</button>
                 </div>
               </div>
             </div>
@@ -124,31 +138,29 @@
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
                 <div class="row">
                     <div class="col-md-2">
-                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Supplier</label>
-                    </div>
-                    <div class="col-md-2 offset-md-8">
-                        <button onclick="newSupplier()" style="float: right;" id="add-customer-button" class="col-xs-offset-6 btn btn-success"><i class="fa fa-edit "></i> New Supplier</button>
+                        <label class="table-label"><i class="fa fa-angle-right"></i> Data Transaksi</label>
                     </div>
                 </div>
                 <section id="unseen">
-                    <table id="table-supplier" class="table table-bordered table-striped table-condensed">
+                    <table id="table-trx" class="table table-bordered table-striped table-condensed">
                     <thead>
                         <tr>
-                            <th>Nama Supplier</th>
-                            <th>Item</th>
-                            <th>Telepon</th>
-                            <th>Action</th>
+                            <th>Kode Barcode</th>
+                            <th>Nama Barang</th>
+                            <th>Harga</th>
+                            <th>Qty Terjual</th>
+                            <th>Margin (%)</th>
+                            <th>Margin (Rp)</th>
                         </tr>
                     </thead>
-                    <tbody id="table-supplier-tbody">
+                    <tbody id="table-trx-tbody">
                         <tr>
                             <td>Supplier Kerupuk</td>
                             <td>Kerupuk</td>
                             <td>08128379287</td>
-                            <td>
-                                <button onclick="deleteThisSupplier()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                                <button onclick="updateThisSupplier()" class="btn btn-info"><i class="fa fa-edit"></i></button>
-                            </td>
+                            <td>08128379287</td>
+                            <td>08128379287</td>
+                            <td>08128379287</td>
                         </tr>
                     </tbody>
                     </table>
@@ -187,7 +199,7 @@
     </footer>
     <!--footer end-->
   </section>
-  <script src="js/fe-input-supplier.js"></script>
+  <script src="js/fe-report.js"></script>
   <!--script for this page-->
 </body>
 

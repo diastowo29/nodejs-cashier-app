@@ -6,8 +6,8 @@ var $ = jQuery = require("jquery")
 getAllSupplier()
 
 function newSupplier () {
-    $('#new-supplier-container').show()
-    $('#update-supplier-container').hide()
+    $('#new-panel').show()
+    $('#update-panel').hide()
 }
 
 function updateSupplier (id) {
@@ -55,8 +55,8 @@ ipcRenderer.on('delete-supplier', function (event, supplier) {
 });
 
 function updateThisSupplier (id) {
-    $('#new-supplier-container').hide()
-    $('#update-supplier-container').show()
+    $('#new-panel').hide()
+    $('#update-panel').show()
 
     var nama = $('#table-supplier #row_nama_' + id).text();
     var item = $('#table-supplier #row_item_' + id).text();
@@ -70,8 +70,8 @@ function updateThisSupplier (id) {
 
 function getAllSupplier () {
     $("#table-supplier-tbody").empty();
-    $('#new-supplier-container').hide()
-    $('#update-supplier-container').hide()
+    $('#new-panel').show()
+    $('#update-panel').hide()
     ipcRenderer.send('get-all-supplier', true);
 }
 

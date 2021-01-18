@@ -56,7 +56,7 @@ ipcRenderer.on('get-many-product', function (event, many_product) {
             qty: $('#row_input_qty_' + product.dataValues.id).val(),
             margin: product.dataValues.margin,
             total: $('#totalCell').text().replace('Rp. ', ''),
-            pembayaran: $('#rupiah').val(),
+            pembayaran: $('#payment-input').val(),
             trx_date: today
         })
     });
@@ -87,7 +87,7 @@ ipcRenderer.on('get-product', function (event, product) {
 });
 
 function rupiahInput () {
-    var rupiah = $('#rupiah').val();
+    var rupiah = $('#payment-input').val();
     var total = $('#totalCell').text().replace('Rp. ', '');
     var kembalian = parseInt(rupiah) - parseInt(total)
     $('#changeRupiah').html('Rp. ' + kembalian)
