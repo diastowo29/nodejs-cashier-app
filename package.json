@@ -50,6 +50,7 @@
     "escpos": "^3.0.0-alpha.6",
     "escpos-usb": "^3.0.0-alpha.4",
     "jquery": "^3.5.1",
+    "node-thermal-printer": "^4.1.2",
     "pg": "^8.5.1",
     "sequelize": "^6.3.5"
   },

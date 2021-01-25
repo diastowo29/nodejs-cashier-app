@@ -72,8 +72,9 @@ function doFilter () {
             ipcRenderer.send('search-trx-wild', filterParam);
             break;
         default:
-            var newRow = generateEmptyRow();
-            $('#table-trx').find('tbody').append(newRow);
+            var startDate = $('#range1-filter').val()
+            var endDate = $('#range2-filter').val()
+            ipcRenderer.send('search-trx-adv', startDate, endDate);
             break;
     }
 }
@@ -122,7 +123,6 @@ ipcRenderer.on('get-all-trx', function (event, trx_data) {
             }
         }
     });
-    console.log(trxSummarys)
     trxSummarys.forEach(trx => {
         var newRow = generateRow(trx);
         $('#table-trx').find('tbody').append(newRow);
@@ -135,7 +135,7 @@ function generateRow (data) {
     var margin = (data.harga * (data.margin/100))*data.qty
     var newRow = `<tr>
     <td id="row_barcode_` + data.id + `">` + data.barcode + `</td>
-    <td id="row_nama_` + data.id + `">` + data.barcode + `</td>
+    <td id="row_nama_` + data.id + `">` + data.nama + `</td>
     <td id="row_harga_` + data.id + `">` + data.harga + `</td>
     <td id="row_margin_` + data.id + `">` + data.qty + `</td>
     <td id="row_harga_jual_` + data.id + `">` + data.margin + `</td>

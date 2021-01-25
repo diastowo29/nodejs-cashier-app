@@ -3,7 +3,7 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { itemTabel, customerTabel, supplierTabel, trxTabel }= require('./sequelize');
+const { itemTabel, customerTabel, supplierTabel, trxTabel, userTabel }= require('./sequelize');
 
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
@@ -42,6 +42,7 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+  console.log('is closing')
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -192,9 +193,13 @@ ipcMain.on('create-trx', async function(event, data) {
   });
 });
 
+ipcMain.on('create-trx-done', async function(event, data) {
+  mainWindow.reload();
+});
+
 ipcMain.on('get-all-trx', async function(event, data) {
   trxTabel.findAll().then(trxs => {
-    mainWindow.webContents.send('get-all-trx', trxs);
+    mappingItem(trxs);
   })
 });
 
@@ -204,7 +209,7 @@ ipcMain.on('search-trx-daily', async function(event, data) {
       trx_date: data
     }
   }).then(trxs => {
-    mainWindow.webContents.send('search-trx', trxs);
+    mappingItem(trxs);
   })
 });
 
@@ -216,40 +221,273 @@ ipcMain.on('search-trx-wild', async function(event, data) {
       } 
     }
   }).then(trxs => {
-    mainWindow.webContents.send('search-trx', trxs);
+    mappingItem(trxs);
   })
 });
 
+ipcMain.on('search-trx-adv', async function(event, start, end) {
+  trxTabel.findAll({
+    where: {
+      createdAt: {
+        [Op.between]: [start, end]
+      } 
+    }
+  }).then(trxs => {
+    mappingItem(trxs);
+  })
+});
+
+/* LOGIN AREA */
+ipcMain.on('login', async function(event, username, password, state) {
+  userTabel.findOne({
+    where: {
+      [Op.and]: [
+        { username: username },
+        { password: password }
+      ]
+    }
+  }).then(users => {
+    if (users == null) {
+      mainWindow.webContents.send('user-login-failed', true);
+    } else {
+      userLogin(users, state)
+    }
+  })
+});
+
+ipcMain.on('logout', async function(event, state) {
+  userTabel.update({
+    state: state
+  }, {
+    where: {
+      state: 'ACTIVE'
+    }
+  }).then(userLogout => {
+    mainWindow.loadFile(path.join(__dirname, 'cashier.html'));
+  });
+});
+
+ipcMain.on('goback', async function(event, state) {
+  mainWindow.loadFile(path.join(__dirname, 'cashier.html'));
+});
+
+function userLogin (users, state) {
+  userTabel.update({
+    state: state
+  },{
+    where: {
+      id: users.dataValues.id
+    }
+  }).then(userLogin => {
+    mainWindow.webContents.send('user-login', userLogin);
+    if (state == 'ACTIVE') {
+      mainWindow.loadFile(path.join(__dirname, 'input-product.html'));
+    } else {
+      mainWindow.loadFile(path.join(__dirname, 'cashier.html'));
+    }
+  });
+}
+
+function mappingItem (trxs) {
+  var barcodeList = [];
+  trxs.forEach(barcodeTrx => {
+    var isExist = barcodeList.indexOf(barcodeTrx.barcode)
+    if (isExist == -1) {
+      barcodeList.push(barcodeTrx.barcode)
+    }
+  });
+  itemTabel.findAll({
+    where: {
+      barcode: {
+        [Op.in]: barcodeList
+      }
+    }
+  }).then(items => {
+    items.forEach(item => {
+      trxs.forEach(trx => {
+        if (trx.barcode == item.barcode) {
+          trx.dataValues['nama'] = item.nama_barang
+        }
+      });
+    });
+    mainWindow.webContents.send('search-trx', trxs);
+  })
+}
 
 
-ipcMain.on('do_print', async function(event, data) {
-  console.log('helo')
+ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
   const device  = new escpos.USB();
   const options = { encoding: "GB18030" /* default */ }
   const printer = new escpos.Printer(device, options);
+
+  var myLine = '-------------------------------';
+  var totalDiskon = 0;
   device.open(function(error){
     printer
     .font('a')
     .align('ct')
-    .style('bu')
-    .size(0.01, 0.01)
-    .text('The quick brown fox jumps over the lazy dog')
-    // .text('敏捷的棕色狐狸跳过懒狗')
-    // .barcode('1234567', 'EAN8')
-    .table(["One", "Two", "Three"])
-    // .tableCustom(
-    //     [
-    //     { text:"Left", align:"LEFT", width:0.33, style: 'B' },
-    //     { text:"Center", align:"CENTER", width:0.33},
-    //     { text:"Right", align:"RIGHT", width:0.33 }
-    //     ],
-    //     { encoding: 'cp857', size: [1, 1] } // Optional
-    // )
-    // .qrimage('https://github.com/song940/node-escpos', function(err){
-    //     this.cut();
-    //     this.close();
-    // });
+    .style('B')
+    .size(1, 0.01)
+    .text('PRISMART')
+    printer
+    .style('NORMAL')
+    .size(0.0000001, 0.01)
+    .text('Puri Sriwedari Cibubur')
+    .text('Jl. Alternatif Cibubur')
+    .text('Cimanggis - Depok. 16454')
+    .text(myLine)
+    printer.tableCustom([
+        {
+            text: 'Produk x Qty', 
+            align: 'LEFT',
+            width: 0.3
+        },
+        {
+          text: 'Harga', 
+          align: 'RIGHT',
+          width: 0.2
+        },
+        {
+          text: 'Total', 
+          align: 'RIGHT',
+          width: 0.2
+        }],
+        {
+            encoding: 'cp857',
+            size: [1, 1] 
+        }
+    );
+    printer
+    .align('ct')
+    .text(myLine)
+
+    data.forEach(product => {
+      totalDiskon = totalDiskon + parseInt(product.diskon)
+        printer.tableCustom([
+            {
+                text: product.produk + ' x ' + product.qty, 
+                align: 'LEFT',
+                width: 0.3
+            },
+            {
+              text: product.harga, 
+              align: 'RIGHT',
+              width: 0.2
+            },
+            {
+              text: product.total, 
+              align: 'RIGHT',
+              width: 0.2
+            }],
+            {
+                encoding: 'cp857',
+                size: [1, 1] 
+            }
+        );
+        if (product.diskon != '0') {
+          printer.tableCustom([
+            {
+                text: ' Diskon:  ' + product.diskon, 
+                align: 'LEFT',
+                width: 0.7
+            }],
+            {
+                encoding: 'cp857',
+                size: [1, 1] 
+            }
+        );
+        }
+    });
+    printer
+    .align('ct')
+    .text(myLine)
+    // printer
+    // .align('lt')
+    // .text('Total: ' + newReformatPrice(total.replace('Rp. ', '')))
+    // .text('Anda Hemat: ' + newReformatPrice(totalDiskon))
+    // .text('Bayar: ' + newReformatPrice(bayar))
+    // .text('Kembalian: ' + newReformatPrice(kembalian.replace('Rp. ', '')))
+    // .text('\n')
+    // .align('ct')
+    // .text('Terima Kasih Atas Kunjungan Anda')
+    
+    printer.tableCustom([
+        {
+            text: 'Anda Hemat: ', 
+            align: 'LEFT',
+            width: 0.3
+        },
+        {
+          text: newReformatPrice(totalDiskon), 
+          align: 'RIGHT',
+          width: 0.4
+        }],
+        {
+            encoding: 'cp857',
+            size: [1, 1] 
+        }
+    )
+    printer.tableCustom([
+        {
+            text: 'Total: ', 
+            align: 'LEFT',
+            width: 0.3
+        },
+        {
+          text: newReformatPrice(total.replace('Rp. ', '')), 
+          align: 'RIGHT',
+          width: 0.4
+        }],
+        {
+            encoding: 'cp857',
+            size: [1, 1] 
+        }
+    )
+    printer.tableCustom([
+        {
+            text: 'Bayar: ', 
+            align: 'LEFT',
+            width: 0.3
+        },
+        {
+          text: newReformatPrice(bayar), 
+          align: 'RIGHT',
+          width: 0.4
+        }],
+        {
+            encoding: 'cp857',
+            size: [1, 1] 
+        }
+    )
+    printer.tableCustom([
+        {
+            text: 'Kembalian: ', 
+            align: 'LEFT',
+            width: 0.3
+        },
+        {
+          text: newReformatPrice(kembalian.replace('Rp. ', '')), 
+          align: 'RIGHT',
+          width: 0.4
+        }],
+        {
+            encoding: 'cp857',
+            size: [1, 1] 
+        }
+    )
+    printer
+    .align('ct')
+    .newLine()
+    .text('Terima Kasih')
+    .text('Atas Kunjungan Berbelanja Anda')
+    .text('Have A Pleasant Day')
+
     .cut()
     .close()
     });
 });
+
+function newReformatPrice (price) {
+  var newPrice = parseFloat(price)
+  return 'Rp. ' + (newPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+}

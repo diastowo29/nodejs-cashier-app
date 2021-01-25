@@ -3,6 +3,7 @@ const itemModel = require('./models/item-data')
 const customerModel = require('./models/customer-data')
 const supplierModel = require('./models/supplier-data')
 const trxModel = require('./models/trx')
+const userModel = require('./models/users')
 
 var sequelize_db;
 
@@ -30,6 +31,7 @@ const itemTabel = itemModel(sequelize_db, Sequelize)
 const customerTabel = customerModel(sequelize_db, Sequelize)
 const supplierTabel = supplierModel(sequelize_db, Sequelize)
 const trxTabel = trxModel(sequelize_db, Sequelize)
+const userTabel = userModel(sequelize_db, Sequelize)
 
 sequelize_db.sync({ alter: true })
   .then(() => {
@@ -40,5 +42,6 @@ module.exports = {
 	itemTabel,
 	customerTabel,
 	supplierTabel,
-	trxTabel
+	trxTabel,
+	userTabel
 }

@@ -1,5 +1,8 @@
 const remote = require('electron').remote
 var ipcRenderer = require('electron').ipcRenderer;
+const ThermalPrinter = require("node-thermal-printer").printer;
+const Types = require("node-thermal-printer").types;
+const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
 
 var $ = jQuery = require("jquery")
 // var rupiah = document.getElementById('rupiah');
@@ -26,18 +29,52 @@ function formatRupiah (angka) {
     // return rupiah;
 }
 
+function payMethodChange () {
+    var paymentMethod = $('#payment-method').val()
+    console.log(paymentMethod)
+    if (paymentMethod == 'debit') {
+        $('#payment-input').val($('#totalCell').text().replace('Rp. ', ''));
+        $('#payment-input').attr('disabled', true);
+    } else {
+        $('#payment-input').attr('disabled', false);
+    }
+}
+
 function doPrint () {
     var barcodes = [];
+    var productArray = [];
+    var totalHarga = '';
+    var bayar = '';
+    var kembalian = '';
     $("#table-trx-tbody td").each(function() {
         var tdId = $(this).attr("id");
         if (tdId.includes('row_barcode_')) {
             var barcodeId = $(this).text()
             var dataId = tdId.split('_')[2];
+            console.log($('#row_nama_' + dataId).text())
+            console.log($('#row_input_qty_' + dataId).val())
+            console.log($('#row_total_' + dataId).text())
+            productArray.push({
+                produk: $('#row_nama_' + dataId).text(),
+                qty: $('#row_input_qty_' + dataId).val(),
+                harga: $('#row_harga_' + dataId).text(),
+                diskon: $('#row_diskon_' + dataId).text(),
+                total: $('#row_total_' + dataId).text()
+            })
             $('#row_input_qty_' + dataId).prop( "disabled", true );
             barcodes.push(barcodeId)
-        }
+        } 
     });
+    totalHarga = $('#totalCell').text()
+    bayar = $('#payment-input').val()
+    kembalian = $('#changeRupiah').text()
     ipcRenderer.send('get-many-product', barcodes);
+    ipcRenderer.send('do_print', productArray, totalHarga, bayar, kembalian);
+}
+
+function deleteThisProduct (id) {
+    $('#row_trx_' + id).remove();
+    checkTable();
 }
 
 ipcRenderer.on('get-many-product', function (event, many_product) {
@@ -66,6 +103,7 @@ ipcRenderer.on('get-many-product', function (event, many_product) {
 
 ipcRenderer.on('create-trx', function (event, trx) {
     console.log('done')
+    ipcRenderer.send('create-trx-done', true);
 });
 
 function barcodeChange () {
@@ -115,6 +153,17 @@ function qtyChange (id) {
     countTotal();
 }
 
+function checkTable () {
+    var rowCount = $('#table-trx-tbody tr').length;
+    console.log(rowCount)
+    if (rowCount == 0) {
+        var newRow = ` <tr id="no_trx_row">
+            <td colspan="7">Belum ada transaksi</td>
+        </tr>`
+        $('#table-trx').find('tbody').append(newRow);
+    }
+}
+
 function generateRow (data) {
     var hargaJualTotal = parseInt(data.dataValues.harga_jual) * 1 - data.dataValues.diskon
     var newRow = `<tr id="row_trx_` + data.dataValues.id + `">
@@ -127,6 +176,6 @@ function generateRow (data) {
     <td id="row_button">
         <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
     </td>
-    <tr>`
+    </tr>`
     return newRow;
 }

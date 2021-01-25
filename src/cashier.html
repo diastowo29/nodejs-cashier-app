@@ -28,7 +28,7 @@
   <script>
     var $ = jQuery = require("jquery")
     $(function(){
-      $("#includedContent").load("navbar.html"); 
+      $("#includedContent").load("navbar-kasir.html"); 
     });
   </script>
   <style>
@@ -56,6 +56,12 @@
       <!--logo start-->
       <a href="index.html" class="logo"><b>PRIS<span>MART</span></b></a>
       <!--logo end-->
+      
+      <div class="top-menu">
+        <ul class="nav pull-right top-menu" style="margin-top: 20px;">
+          <li><a class="logout" href="login.html">Login</a></li>
+        </ul>
+      </div>
     </header>
     <!--header end-->
     <!--sidebar start-->
@@ -123,6 +129,15 @@
                       <td class="numeric" id="totalCell">Rp 0</td>
                     </tr>
                     <tr>
+                      <td class="numeric" colspan="5"><b>Metode Pembayaran</b></td>
+                      <td class="numeric">
+                        <select class="form-control" id="payment-method" onchange="payMethodChange()">
+                          <option value="cash">Tunai</option>
+                          <option value="debit">Debit</option>
+                        </select>
+                      </td>
+                    </tr>
+                    <tr>
                       <td class="numeric" colspan="5"><b>Pembayaran (Rp)</b></td>
                       <td>
                         <div class="col-md-12"><input id="payment-input" oninput="rupiahInput()" class="form-control" type="number"></div>
@@ -137,7 +152,7 @@
                     </tr>
                     <tr>
                       <td class="numeric" colspan="5"><b>Kembalian</b></td>
-                      <td class="numeric" id="changeRupiah">Rp 0</td>
+                      <td class="numeric" id="changeRupiah">Rp. 0</td>
                     </tr>
                   </table>
                 </div>
