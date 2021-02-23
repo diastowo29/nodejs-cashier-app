@@ -5,6 +5,9 @@ const Types = require("node-thermal-printer").types;
 const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
 
 var $ = jQuery = require("jquery")
+
+var proceedPrint = false;
+$('#trx-done-btn').attr('disabled', true);
 // var rupiah = document.getElementById('rupiah');
 
 // rupiah.addEventListener('keyup', function(e){
@@ -31,7 +34,6 @@ function formatRupiah (angka) {
 
 function payMethodChange () {
     var paymentMethod = $('#payment-method').val()
-    console.log(paymentMethod)
     if (paymentMethod == 'debit') {
         $('#payment-input').val($('#totalCell').text().replace('Rp. ', ''));
         $('#payment-input').attr('disabled', true);
@@ -51,10 +53,8 @@ function doPrint () {
         if (tdId.includes('row_barcode_')) {
             var barcodeId = $(this).text()
             var dataId = tdId.split('_')[2];
-            console.log($('#row_nama_' + dataId).text())
-            console.log($('#row_input_qty_' + dataId).val())
-            console.log($('#row_total_' + dataId).text())
             productArray.push({
+                barcode: $('#row_barcode_' + dataId).text(),
                 produk: $('#row_nama_' + dataId).text(),
                 qty: $('#row_input_qty_' + dataId).val(),
                 harga: $('#row_harga_' + dataId).text(),
@@ -68,6 +68,8 @@ function doPrint () {
     totalHarga = $('#totalCell').text()
     bayar = $('#payment-input').val()
     kembalian = $('#changeRupiah').text()
+    console.log('printing...')
+    console.log(productArray)
     ipcRenderer.send('get-many-product', barcodes);
     ipcRenderer.send('do_print', productArray, totalHarga, bayar, kembalian);
 }
@@ -97,12 +99,10 @@ ipcRenderer.on('get-many-product', function (event, many_product) {
             trx_date: today
         })
     });
-    console.log(trx)
     ipcRenderer.send('create-trx', trx);
 });
 
 ipcRenderer.on('create-trx', function (event, trx) {
-    console.log('done')
     ipcRenderer.send('create-trx-done', true);
 });
 
@@ -128,6 +128,11 @@ function rupiahInput () {
     var rupiah = $('#payment-input').val();
     var total = $('#totalCell').text().replace('Rp. ', '');
     var kembalian = parseInt(rupiah) - parseInt(total)
+    if (kembalian < 0) {
+        $('#trx-done-btn').attr('disabled', true);
+    } else {
+        $('#trx-done-btn').attr('disabled', false);
+    }
     $('#changeRupiah').html('Rp. ' + kembalian)
 }
 
@@ -139,7 +144,6 @@ function countTotal () {
             subTotal = subTotal + parseInt($(this).text());
         }
     });
-    console.log(subTotal)
     $('#totalCell').html('Rp. ' + subTotal)
 }
 
@@ -178,4 +182,8 @@ function generateRow (data) {
     </td>
     </tr>`
     return newRow;
+}
+
+function doReset () {
+    ipcRenderer.send('create-trx-done', true);
 }

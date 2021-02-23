@@ -26,7 +26,8 @@ const createWindow = () => {
     }
   });
   mainWindow.setMenuBarVisibility(false);
-  mainWindow.webContents.openDevTools()
+  // mainWindow.setFullScreen(true);
+  // mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'cashier.html'));
@@ -237,6 +238,12 @@ ipcMain.on('search-trx-adv', async function(event, start, end) {
   })
 });
 
+ipcMain.on('delete-all-trx', async function(event, data) {
+  trxTabel.destroy({
+    truncate: true
+  })
+});
+
 /* LOGIN AREA */
 ipcMain.on('login', async function(event, username, password, state) {
   userTabel.findOne({
@@ -362,6 +369,19 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
     .text(myLine)
 
     data.forEach(product => {
+      itemTabel.findOne({
+        where: {
+          barcode: product.barcode
+        }
+      }).then(productDb => {
+        itemTabel.update({
+          stock: productDb.stock - parseInt(product.qty)
+        },{
+          where: {
+            id: productDb.id
+          }
+        })
+      })
       totalDiskon = totalDiskon + parseInt(product.diskon)
         printer.tableCustom([
             {

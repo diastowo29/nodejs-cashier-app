@@ -134,8 +134,12 @@
 
                 <div class="col-md-4">
                     <label for="add-supplier-button" class="hide-label">a</label>
-                    <button onclick="doFilter()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit "></i> Apply</button>
+                    <button onclick="doFilter()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit"></i> Apply</button>
                 </div>
+                <div class="col-md-4 offset-md-4">
+                  <label for="add-supplier-button" class="hide-label">a</label>
+                  <button onclick="doClearData()" id="add-supplier-button" class="form-control btn btn-danger"><i class="fa fa-trash"></i> Clear Data</button>
+              </div>
               </div>
             </div>
           </div>
@@ -148,29 +152,29 @@
                 </div>
                 <section id="unseen">
                     <table id="table-trx" class="table table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Kode Barcode</th>
-                            <th>Nama Barang</th>
-                            <th>Harga</th>
-                            <th>Qty Terjual</th>
-                            <th>Margin (%)</th>
-                            <th>Margin (Rp)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-trx-tbody">
-                        <tr>
-                            <td>Supplier Kerupuk</td>
-                            <td>Kerupuk</td>
-                            <td>08128379287</td>
-                            <td>08128379287</td>
-                            <td>08128379287</td>
-                            <td>08128379287</td>
-                        </tr>
-                    </tbody>
+                      <thead>
+                          <tr>
+                              <th>Kode Barcode</th>
+                              <th>Nama Barang</th>
+                              <th>Harga</th>
+                              <th>Qty Terjual</th>
+                              <th>Margin (%)</th>
+                              <th>Margin (Rp)</th>
+                          </tr>
+                      </thead>
+                      <tbody id="table-trx-tbody">
+                          <tr>
+                              <td>Supplier Kerupuk</td>
+                              <td>Kerupuk</td>
+                              <td>08128379287</td>
+                              <td>08128379287</td>
+                              <td>08128379287</td>
+                              <td>08128379287</td>
+                          </tr>
+                      </tbody>
                     </table>
                 </section>
-                </div>
+              </div>
             </div>
             <!-- /content-panel -->
           </div>

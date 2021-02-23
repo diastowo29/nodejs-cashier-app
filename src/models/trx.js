@@ -5,6 +5,7 @@ module.exports = (sequelize, type) => {
           primaryKey: true,
           autoIncrement: true
         },
+        id_trx: type.STRING(100),
         barcode: type.STRING(100),
         harga: type.INTEGER,
         diskon: type.INTEGER,
@@ -12,6 +13,7 @@ module.exports = (sequelize, type) => {
         qty: type.INTEGER,
         total: type.INTEGER,
         pembayaran: type.INTEGER,
+        metode_pembayaran: type.STRING(100),
         trx_date: type.STRING(50),
     });
 }

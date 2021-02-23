@@ -167,3 +167,13 @@ function generateEmptyRow () {
     <tr>`
     return newRow;
 }
+
+function doClearData () {
+    var clearAlert = confirm("Semua data transaksi akan dihapus, anda yakin?");
+    if (clearAlert) {
+        $("#table-trx-tbody").empty();
+        ipcRenderer.send('delete-all-trx', true);
+        var newRow = generateEmptyRow();
+        $('#table-trx').find('tbody').append(newRow);
+    }
+}
