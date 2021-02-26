@@ -175,23 +175,37 @@ ipcMain.on('get-product', async function(event, data) {
   })
 });
 
-ipcMain.on('get-many-product', async function(event, data) {
+ipcMain.on('get-many-product', async function(event, data, pay_method, productArray, totalHarga, bayar, kembalian) {
   itemTabel.findAll({
     where: {
       barcode: data
     }
   }).then(product => {
-    mainWindow.webContents.send('get-many-product', product);
+    mainWindow.webContents.send('get-many-product', product, pay_method, productArray, totalHarga, bayar, kembalian);
   })
 });
 
 /* TRX AREA */
-ipcMain.on('create-trx', async function(event, data) {
-  data.forEach(trx => {
-    trxTabel.create(trx).then(created_trx => {
-      mainWindow.webContents.send('create-trx', created_trx);
+ipcMain.on('create-trx', async function(event, data, pay_method, productArray, totalHarga, bayar, kembalian) {
+  var counter = 0;
+  var trxDate = data[0].id_trx.split('/')[0]
+  trxTabel.findAll({
+    attributes: ['id_trx'],
+    group: 'id_trx', 
+    where: {
+      id_trx: {
+        [Op.like]: trxDate + '%'
+      }
+    }
+  }).then(countTrx => {
+    counter = countTrx.length + 1
+    data.forEach(trx => {
+      trx.id_trx = trx.id_trx + counter
+    });
+    trxTabel.bulkCreate(data).then(created_trx => {
+      mainWindow.webContents.send('create-trx', created_trx, pay_method, productArray, totalHarga, bayar, kembalian);
     })
-  });
+  })
 });
 
 ipcMain.on('create-trx-done', async function(event, data) {
@@ -322,10 +336,12 @@ function mappingItem (trxs) {
 }
 
 
-ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
+ipcMain.on('do_print', async function(event, data, total, bayar, kembalian, paymentMethod, id_trx) {
   const device  = new escpos.USB();
   const options = { encoding: "GB18030" /* default */ }
   const printer = new escpos.Printer(device, options);
+
+  console.log(data)
 
   var myLine = '-------------------------------';
   var totalDiskon = 0;
@@ -343,16 +359,21 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
     .text('Jl. Alternatif Cibubur')
     .text('Cimanggis - Depok. 16454')
     .text(myLine)
+    printer
+    .text('nota: ' + id_trx)
+    printer
+    .align('ct')
+    .text(myLine)
     printer.tableCustom([
         {
-            text: 'Produk x Qty', 
+            text: 'Produk', 
             align: 'LEFT',
-            width: 0.3
+            width: 0.2
         },
         {
-          text: 'Harga', 
+          text: 'Qty x Harga', 
           align: 'RIGHT',
-          width: 0.2
+          width: 0.3
         },
         {
           text: 'Total', 
@@ -385,29 +406,7 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
       totalDiskon = totalDiskon + parseInt(product.diskon)
         printer.tableCustom([
             {
-                text: product.produk + ' x ' + product.qty, 
-                align: 'LEFT',
-                width: 0.3
-            },
-            {
-              text: product.harga, 
-              align: 'RIGHT',
-              width: 0.2
-            },
-            {
-              text: product.total, 
-              align: 'RIGHT',
-              width: 0.2
-            }],
-            {
-                encoding: 'cp857',
-                size: [1, 1] 
-            }
-        );
-        if (product.diskon != '0') {
-          printer.tableCustom([
-            {
-                text: ' Diskon:  ' + product.diskon, 
+                text: product.produk, 
                 align: 'LEFT',
                 width: 0.7
             }],
@@ -416,6 +415,33 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
                 size: [1, 1] 
             }
         );
+        printer.tableCustom([
+          {
+              text: product.qty + ' x  ' + product.harga + ' =', 
+              align: 'RIGHT',
+              width: 0.4
+          },
+          {
+            text: product.total, 
+            align: 'RIGHT',
+            width: 0.2
+          }],
+          {
+              encoding: 'cp857',
+              size: [1, 1] 
+          });
+
+        if (product.diskon != '0') {
+          printer.tableCustom([
+            {
+                text: 'Diskon: ' + product.diskon, 
+                align: 'RIGHT',
+                width: 0.4
+            }],
+            {
+                encoding: 'cp857',
+                size: [1, 1] 
+            });
         }
     });
     printer
@@ -479,6 +505,22 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian) {
             size: [1, 1] 
         }
     )
+    // printer.tableCustom([
+    //     {
+    //         text: 'Metode Pembayaran: ', 
+    //         align: 'LEFT',
+    //         width: 0.5
+    //     },
+    //     {
+    //       text: paymentMethod, 
+    //       align: 'RIGHT',
+    //       width: 0.2
+    //     }],
+    //     {
+    //         encoding: 'cp857',
+    //         size: [1, 1] 
+    //     }
+    // )
     printer.tableCustom([
         {
             text: 'Kembalian: ', 

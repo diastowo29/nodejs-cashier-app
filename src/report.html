@@ -136,7 +136,11 @@
                     <label for="add-supplier-button" class="hide-label">a</label>
                     <button onclick="doFilter()" id="add-supplier-button" class="form-control btn btn-success"><i class="fa fa-edit"></i> Apply</button>
                 </div>
-                <div class="col-md-4 offset-md-4">
+                <div class="col-md-4">
+                  <label for="add-supplier-button" class="hide-label">a</label>
+                  <button onclick="doDownloadData()" id="add-supplier-button" class="form-control btn btn-info"><i class="fa fa-download"></i> Download</button>
+              </div>
+                <div class="col-md-4">
                   <label for="add-supplier-button" class="hide-label">a</label>
                   <button onclick="doClearData()" id="add-supplier-button" class="form-control btn btn-danger"><i class="fa fa-trash"></i> Clear Data</button>
               </div>
@@ -173,6 +177,8 @@
                           </tr>
                       </tbody>
                     </table>
+                    <a download="somedatasss.xlsx" href="#" 
+                    onclick="return ExcellentExport.convert({ anchor: this, filename: 'data_123.array', format: 'xlsx'},[{name: 'Sheet Name Here 1', from: {table: 'table-trx'}}]);">Export to CSV</a>
                 </section>
               </div>
             </div>
@@ -183,6 +189,7 @@
         <!-- /row -->
       </section>
       <!-- /wrapper -->
+
     </section>
     <!-- /MAIN CONTENT -->
     <!--main content end-->
@@ -210,6 +217,7 @@
   </section>
   <script src="js/fe-report.js"></script>
   <script src="js/fe-login.js"></script>
+  <script type="text/javascript" src="dist/excellentexport.js"></script>
   <!--script for this page-->
 </body>
 

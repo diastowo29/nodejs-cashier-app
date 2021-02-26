@@ -34,11 +34,14 @@ function formatRupiah (angka) {
 
 function payMethodChange () {
     var paymentMethod = $('#payment-method').val()
-    if (paymentMethod == 'debit') {
+    if (paymentMethod == 'Debit') {
+        $('#trx-done-btn').attr('disabled', false);
         $('#payment-input').val($('#totalCell').text().replace('Rp. ', ''));
         $('#payment-input').attr('disabled', true);
     } else {
+        $('#trx-done-btn').attr('disabled', true);
         $('#payment-input').attr('disabled', false);
+        $('#payment-input').val('');
     }
 }
 
@@ -48,6 +51,7 @@ function doPrint () {
     var totalHarga = '';
     var bayar = '';
     var kembalian = '';
+    var paymentMethod = $('#payment-method').val()
     $("#table-trx-tbody td").each(function() {
         var tdId = $(this).attr("id");
         if (tdId.includes('row_barcode_')) {
@@ -69,9 +73,7 @@ function doPrint () {
     bayar = $('#payment-input').val()
     kembalian = $('#changeRupiah').text()
     console.log('printing...')
-    console.log(productArray)
-    ipcRenderer.send('get-many-product', barcodes);
-    ipcRenderer.send('do_print', productArray, totalHarga, bayar, kembalian);
+    ipcRenderer.send('get-many-product', barcodes, paymentMethod, productArray, totalHarga, bayar, kembalian);
 }
 
 function deleteThisProduct (id) {
@@ -79,14 +81,19 @@ function deleteThisProduct (id) {
     checkTable();
 }
 
-ipcRenderer.on('get-many-product', function (event, many_product) {
+ipcRenderer.on('get-many-product', function (event, many_product, pay_method, productArray, totalHarga, bayar, kembalian) {
     var trx = []
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
+
+    var hours = today.getHours();
+    var minuters = today.getMinutes();
+
+    var trx_id_prefix = Math.random().toString(36).slice(2);
     
-    today = dd + '/' + mm + '/' + yyyy;
+    var todayDate = dd + '-' + mm + '-' + yyyy;
     many_product.forEach(product => {
         trx.push({
             barcode: product.dataValues.barcode,
@@ -96,13 +103,18 @@ ipcRenderer.on('get-many-product', function (event, many_product) {
             margin: product.dataValues.margin,
             total: $('#totalCell').text().replace('Rp. ', ''),
             pembayaran: $('#payment-input').val(),
-            trx_date: today
+            trx_date: todayDate,
+            metode_pembayaran: pay_method,
+            id_trx: todayDate + '/' + hours + ':' + minuters + '/'
         })
     });
-    ipcRenderer.send('create-trx', trx);
+    /* SAMPE SINI, TAMBAHIN PARAMETER KE CREATE TRX */
+    ipcRenderer.send('create-trx', trx, pay_method, productArray, totalHarga, bayar, kembalian);
 });
 
-ipcRenderer.on('create-trx', function (event, trx) {
+ipcRenderer.on('create-trx', function (event, trx, pay_method, productArray, totalHarga, bayar, kembalian) {
+    console.log(trx)
+    ipcRenderer.send('do_print', productArray, totalHarga, bayar, kembalian, pay_method, trx[0].dataValues.id_trx);
     ipcRenderer.send('create-trx-done', true);
 });
 
