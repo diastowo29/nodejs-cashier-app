@@ -54,7 +54,7 @@ function doFilter () {
         case 'DAILY':
             // console.log('daily')
             var dateInput = $('#tanggal-daily-filter').val().toString().split('-')
-            filterParam = dateInput[2] + '/' + dateInput[1] + '/' + dateInput[0]
+            filterParam = dateInput[2] + '-' + dateInput[1] + '-' + dateInput[0]
             ipcRenderer.send('search-trx-daily', filterParam);
             break;
         case 'MONTHLY':
@@ -64,11 +64,43 @@ function doFilter () {
             } else {
                 month = $('#bulan-monthly-filter').val()
             }
-            filterParam = '%/' + month + '/' + $('#tahun-monthly-filter').val() 
+            filterParam = '%-' + month + '-' + $('#tahun-monthly-filter').val() 
             ipcRenderer.send('search-trx-wild', filterParam);
             break;
         case 'ANNUALY':
-            filterParam = '%/' + $('#tahun-annualy-filter').val() 
+            filterParam = '%-' + $('#tahun-annualy-filter').val() 
+            ipcRenderer.send('search-trx-wild', filterParam);
+            break;
+        default:
+            var startDate = $('#range1-filter').val()
+            var endDate = $('#range2-filter').val()
+            ipcRenderer.send('search-trx-adv', startDate, endDate);
+            break;
+    }
+}
+
+function doFilterCash () {
+    $("#table-trx-tbody").empty();
+    var filterParam = '';
+    switch (FILTER_STATE) {
+        case 'DAILY':
+            // console.log('daily')
+            var dateInput = $('#tanggal-daily-filter').val().toString().split('-')
+            filterParam = dateInput[2] + '-' + dateInput[1] + '-' + dateInput[0]
+            ipcRenderer.send('search-trx-daily', filterParam);
+            break;
+        case 'MONTHLY':
+            var month = '';
+            if ($('#bulan-monthly-filter').val().length == 1) {
+                month = '0' + $('#bulan-monthly-filter').val()
+            } else {
+                month = $('#bulan-monthly-filter').val()
+            }
+            filterParam = '%-' + month + '-' + $('#tahun-monthly-filter').val() 
+            ipcRenderer.send('search-trx-wild', filterParam);
+            break;
+        case 'ANNUALY':
+            filterParam = '%-' + $('#tahun-annualy-filter').val() 
             ipcRenderer.send('search-trx-wild', filterParam);
             break;
         default:
@@ -140,7 +172,7 @@ function generateRow (data) {
     <td id="row_margin_` + data.id + `">` + data.qty + `</td>
     <td id="row_harga_jual_` + data.id + `">` + data.margin + `</td>
     <td id="row_diskon_` + data.id + `">` + margin + `</td>
-    <tr>`
+    </tr>`
     return newRow;
 }
 
@@ -176,4 +208,13 @@ function doClearData () {
         var newRow = generateEmptyRow();
         $('#table-trx').find('tbody').append(newRow);
     }
+}
+
+function downloadTest () {
+    TableToExcel.convert(document.getElementById("table-trx"), {
+        name: "table1.xlsx",
+        sheet: {
+          name: "Sheet 1"
+        }
+      });
 }

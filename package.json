@@ -45,6 +45,7 @@
     }
   },
   "dependencies": {
+    "@linways/table-to-excel": "^1.0.4",
     "bootstrap": "^5.0.0-beta1",
     "electron-squirrel-startup": "^1.0.0",
     "escpos": "^3.0.0-alpha.6",
