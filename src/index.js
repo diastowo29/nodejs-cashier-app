@@ -4,10 +4,13 @@ const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
 const { itemTabel, customerTabel, supplierTabel, trxTabel, userTabel }= require('./sequelize');
+const log = require('electron-log');
 
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 // const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
+
+log.transports.console.level = false;
  
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -43,7 +46,7 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-  console.log('is closing')
+  // console.log('is closing')
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -87,7 +90,7 @@ ipcMain.on('delete-customer', async function(event, id) {
 });
 
 ipcMain.on('update-customer', async function(event, data, id) {
-  console.log(id)
+  // console.log(id)
   customerTabel.update(data,{
     where: {
       id: id
@@ -122,7 +125,7 @@ ipcMain.on('delete-supplier', async function(event, id) {
 });
 
 ipcMain.on('update-supplier', async function(event, data, id) {
-  console.log(id)
+  // console.log(id)
   supplierTabel.update(data,{
     where: {
       id: id
@@ -337,216 +340,221 @@ function mappingItem (trxs) {
 
 
 ipcMain.on('do_print', async function(event, data, total, bayar, kembalian, paymentMethod, id_trx) {
-  const device  = new escpos.USB();
-  const options = { encoding: "GB18030" /* default */ }
-  const printer = new escpos.Printer(device, options);
-
-  console.log(data)
-
-  var myLine = '-------------------------------';
-  var totalDiskon = 0;
-  device.open(function(error){
-    printer
-    .font('a')
-    .align('ct')
-    .style('B')
-    .size(1, 0.01)
-    .text('PRISMART')
-    printer
-    .style('NORMAL')
-    .size(0.0000001, 0.01)
-    .text('Puri Sriwedari Cibubur')
-    .text('Jl. Alternatif Cibubur')
-    .text('Cimanggis - Depok. 16454')
-    .text(myLine)
-    printer
-    .text('nota: ' + id_trx)
-    printer
-    .align('ct')
-    .text(myLine)
-    printer.tableCustom([
-        {
-            text: 'Produk', 
-            align: 'LEFT',
-            width: 0.2
-        },
-        {
-          text: 'Qty x Harga', 
-          align: 'RIGHT',
-          width: 0.3
-        },
-        {
-          text: 'Total', 
-          align: 'RIGHT',
-          width: 0.2
-        }],
-        {
-            encoding: 'cp857',
-            size: [1, 1] 
-        }
-    );
-    printer
-    .align('ct')
-    .text(myLine)
-
-    data.forEach(product => {
-      itemTabel.findOne({
-        where: {
-          barcode: product.barcode
-        }
-      }).then(productDb => {
-        itemTabel.update({
-          stock: productDb.stock - parseInt(product.qty)
-        },{
-          where: {
-            id: productDb.id
-          }
-        })
-      })
-      totalDiskon = totalDiskon + parseInt(product.diskon)
-        printer.tableCustom([
-            {
-                text: product.produk, 
-                align: 'LEFT',
-                width: 0.7
-            }],
-            {
-                encoding: 'cp857',
-                size: [1, 1] 
-            }
-        );
-        printer.tableCustom([
+  try {
+    const device  = new escpos.USB();
+    const options = { encoding: "GB18030" /* default */ }
+    const printer = new escpos.Printer(device, options);
+  
+    // console.log(data)
+  
+    var myLine = '-------------------------------';
+    var totalDiskon = 0;
+    device.open(function(error){
+      printer
+      .font('a')
+      .align('ct')
+      .style('B')
+      .size(1, 0.01)
+      .text('PRISMART')
+      printer
+      .style('NORMAL')
+      .size(0.0000001, 0.01)
+      .text('Puri Sriwedari Cibubur')
+      .text('Jl. Alternatif Cibubur')
+      .text('Cimanggis - Depok. 16454')
+      .text(myLine)
+      printer
+      .text('nota: ' + id_trx)
+      printer
+      .align('ct')
+      .text(myLine)
+      printer.tableCustom([
           {
-              text: product.qty + ' x  ' + product.harga + ' =', 
-              align: 'RIGHT',
-              width: 0.4
+              text: 'Produk', 
+              align: 'LEFT',
+              width: 0.2
           },
           {
-            text: product.total, 
+            text: 'Qty x Harga', 
+            align: 'RIGHT',
+            width: 0.3
+          },
+          {
+            text: 'Total', 
             align: 'RIGHT',
             width: 0.2
           }],
           {
               encoding: 'cp857',
               size: [1, 1] 
-          });
-
-        if (product.diskon != '0') {
+          }
+      );
+      printer
+      .align('ct')
+      .text(myLine)
+  
+      data.forEach(product => {
+        itemTabel.findOne({
+          where: {
+            barcode: product.barcode
+          }
+        }).then(productDb => {
+          itemTabel.update({
+            stock: productDb.stock - parseInt(product.qty)
+          },{
+            where: {
+              id: productDb.id
+            }
+          })
+        })
+        totalDiskon = totalDiskon + parseInt(product.diskon)
+          printer.tableCustom([
+              {
+                  text: product.produk, 
+                  align: 'LEFT',
+                  width: 0.7
+              }],
+              {
+                  encoding: 'cp857',
+                  size: [1, 1] 
+              }
+          );
           printer.tableCustom([
             {
-                text: 'Diskon: ' + product.diskon, 
+                text: product.qty + ' x  ' + product.harga + ' =', 
                 align: 'RIGHT',
                 width: 0.4
+            },
+            {
+              text: product.total, 
+              align: 'RIGHT',
+              width: 0.2
             }],
             {
                 encoding: 'cp857',
                 size: [1, 1] 
             });
-        }
-    });
-    printer
-    .align('ct')
-    .text(myLine)
-    // printer
-    // .align('lt')
-    // .text('Total: ' + newReformatPrice(total.replace('Rp. ', '')))
-    // .text('Anda Hemat: ' + newReformatPrice(totalDiskon))
-    // .text('Bayar: ' + newReformatPrice(bayar))
-    // .text('Kembalian: ' + newReformatPrice(kembalian.replace('Rp. ', '')))
-    // .text('\n')
-    // .align('ct')
-    // .text('Terima Kasih Atas Kunjungan Anda')
-    
-    printer.tableCustom([
-        {
-            text: 'Anda Hemat: ', 
-            align: 'LEFT',
-            width: 0.3
-        },
-        {
-          text: newReformatPrice(totalDiskon), 
-          align: 'RIGHT',
-          width: 0.4
-        }],
-        {
-            encoding: 'cp857',
-            size: [1, 1] 
-        }
-    )
-    printer.tableCustom([
-        {
-            text: 'Total: ', 
-            align: 'LEFT',
-            width: 0.3
-        },
-        {
-          text: newReformatPrice(total.replace('Rp. ', '')), 
-          align: 'RIGHT',
-          width: 0.4
-        }],
-        {
-            encoding: 'cp857',
-            size: [1, 1] 
-        }
-    )
-    printer.tableCustom([
-        {
-            text: 'Bayar: ', 
-            align: 'LEFT',
-            width: 0.3
-        },
-        {
-          text: newReformatPrice(bayar), 
-          align: 'RIGHT',
-          width: 0.4
-        }],
-        {
-            encoding: 'cp857',
-            size: [1, 1] 
-        }
-    )
-    // printer.tableCustom([
-    //     {
-    //         text: 'Metode Pembayaran: ', 
-    //         align: 'LEFT',
-    //         width: 0.5
-    //     },
-    //     {
-    //       text: paymentMethod, 
-    //       align: 'RIGHT',
-    //       width: 0.2
-    //     }],
-    //     {
-    //         encoding: 'cp857',
-    //         size: [1, 1] 
-    //     }
-    // )
-    printer.tableCustom([
-        {
-            text: 'Kembalian: ', 
-            align: 'LEFT',
-            width: 0.3
-        },
-        {
-          text: newReformatPrice(kembalian.replace('Rp. ', '')), 
-          align: 'RIGHT',
-          width: 0.4
-        }],
-        {
-            encoding: 'cp857',
-            size: [1, 1] 
-        }
-    )
-    printer
-    .align('ct')
-    .newLine()
-    .text('Terima Kasih')
-    .text('Atas Kunjungan Berbelanja Anda')
-    .text('Have A Pleasant Day')
-
-    .cut()
-    .close()
-    });
+  
+          if (product.diskon != '0') {
+            printer.tableCustom([
+              {
+                  text: 'Diskon: ' + product.diskon, 
+                  align: 'RIGHT',
+                  width: 0.4
+              }],
+              {
+                  encoding: 'cp857',
+                  size: [1, 1] 
+              });
+          }
+      });
+      printer
+      .align('ct')
+      .text(myLine)
+      // printer
+      // .align('lt')
+      // .text('Total: ' + newReformatPrice(total.replace('Rp. ', '')))
+      // .text('Anda Hemat: ' + newReformatPrice(totalDiskon))
+      // .text('Bayar: ' + newReformatPrice(bayar))
+      // .text('Kembalian: ' + newReformatPrice(kembalian.replace('Rp. ', '')))
+      // .text('\n')
+      // .align('ct')
+      // .text('Terima Kasih Atas Kunjungan Anda')
+      
+      printer.tableCustom([
+          {
+              text: 'Anda Hemat: ', 
+              align: 'LEFT',
+              width: 0.3
+          },
+          {
+            text: newReformatPrice(totalDiskon), 
+            align: 'RIGHT',
+            width: 0.4
+          }],
+          {
+              encoding: 'cp857',
+              size: [1, 1] 
+          }
+      )
+      printer.tableCustom([
+          {
+              text: 'Total: ', 
+              align: 'LEFT',
+              width: 0.3
+          },
+          {
+            text: newReformatPrice(total.replace('Rp. ', '')), 
+            align: 'RIGHT',
+            width: 0.4
+          }],
+          {
+              encoding: 'cp857',
+              size: [1, 1] 
+          }
+      )
+      printer.tableCustom([
+          {
+              text: 'Bayar: ', 
+              align: 'LEFT',
+              width: 0.3
+          },
+          {
+            text: newReformatPrice(bayar), 
+            align: 'RIGHT',
+            width: 0.4
+          }],
+          {
+              encoding: 'cp857',
+              size: [1, 1] 
+          }
+      )
+      // printer.tableCustom([
+      //     {
+      //         text: 'Metode Pembayaran: ', 
+      //         align: 'LEFT',
+      //         width: 0.5
+      //     },
+      //     {
+      //       text: paymentMethod, 
+      //       align: 'RIGHT',
+      //       width: 0.2
+      //     }],
+      //     {
+      //         encoding: 'cp857',
+      //         size: [1, 1] 
+      //     }
+      // )
+      printer.tableCustom([
+          {
+              text: 'Kembalian: ', 
+              align: 'LEFT',
+              width: 0.3
+          },
+          {
+            text: newReformatPrice(kembalian.replace('Rp. ', '')), 
+            align: 'RIGHT',
+            width: 0.4
+          }],
+          {
+              encoding: 'cp857',
+              size: [1, 1] 
+          }
+      )
+      printer
+      .align('ct')
+      .newLine()
+      .text('Terima Kasih')
+      .text('Atas Kunjungan Berbelanja Anda')
+      .text('Have A Pleasant Day')
+  
+      .cut()
+      .close()
+      });
+  
+  } catch (err) {
+    log.warn(err);
+  }
 });
 
 function newReformatPrice (price) {

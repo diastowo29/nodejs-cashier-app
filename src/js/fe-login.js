@@ -9,11 +9,11 @@ function doLogin () {
 }
 
 ipcRenderer.on('user-login', function (event, user) {
-    console.log(user)
+    // console.log(user)
 });
 
 ipcRenderer.on('user-login-failed', function (event, error) {
-    console.log(error)
+    // console.log(error)
 });
 
 function doLogout () {

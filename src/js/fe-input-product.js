@@ -13,7 +13,7 @@ function submitData () {
     var price = $('#barcode-price').val();
     var sell_price = $('#barcode-sell-price').val();
     
-    console.log(barcode)
+    // console.log(barcode)
     /* INSERT TO DATABASE THEN */
     // $('#myModal').modal('show');
 }
@@ -114,7 +114,9 @@ function marginKeyInput () {
     var basePrice = $('#harga-product').val()
     var margin = $('#margin-product').val()
     var sellPrice = parseInt(basePrice) + (basePrice * (margin/100))
-    $('#harga-jual-product').val(sellPrice)
+    console.log(sellPrice)
+    console.log(sellPrice.toFixed(2))
+    $('#harga-jual-product').val(sellPrice.toFixed(2))
 }
 
 function sellKeyInput () {
@@ -128,7 +130,7 @@ function marginUpdateKeyInput () {
     var basePrice = $('#harga-product-update').val()
     var margin = $('#margin-product-update').val()
     var sellPrice = parseInt(basePrice) + (basePrice * (margin/100))
-    $('#harga-jual-product-update').val(sellPrice)
+    $('#harga-jual-product-update').val(sellPrice.toFixed(2))
 }
 
 function sellKeyUpdateInput () {
@@ -169,7 +171,7 @@ function getAllProduct () {
 }
 
 ipcRenderer.on('all-product', function (event, product_data) {
-    console.log(product_data)
+    // console.log(product_data)
     product_data.forEach(product => {
         var newRow = generateRow(product);
         $('#table-product').find('tbody').append(newRow);

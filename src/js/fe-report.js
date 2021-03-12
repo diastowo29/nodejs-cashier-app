@@ -131,7 +131,7 @@ ipcRenderer.on('search-trx', function (event, trx_data) {
             }
         }
     });
-    console.log(trxSummarys)
+    // console.log(trxSummarys)
     trxSummarys.forEach(trx => {
         var newRow = generateRow(trx);
         $('#table-trx').find('tbody').append(newRow);
@@ -171,7 +171,7 @@ function generateRow (data) {
     <td id="row_harga_` + data.id + `">` + data.harga + `</td>
     <td id="row_margin_` + data.id + `">` + data.qty + `</td>
     <td id="row_harga_jual_` + data.id + `">` + data.margin + `</td>
-    <td id="row_diskon_` + data.id + `">` + margin + `</td>
+    <td id="row_diskon_` + data.id + `">` + margin.toFixed(2) + `</td>
     </tr>`
     return newRow;
 }
@@ -181,8 +181,10 @@ function generateTotalRow (summary) {
     var marginFinal = 0;
     summary.forEach(sum => {
         qty = qty + sum.qty
-        var margin = (sum.harga * (sum.margin/100))*sum.qty
-        marginFinal = marginFinal + margin
+        var margin = parseFloat((sum.harga * (sum.margin/100))*sum.qty).toFixed(2)
+        console.log(parseFloat(margin))
+        console.log(marginFinal)
+        marginFinal = marginFinal + parseFloat(margin)
     });
     var newRow = `<tr>
     <td colspan=3>Total</td>

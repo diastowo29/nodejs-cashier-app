@@ -10,7 +10,7 @@ module.exports = (sequelize, type) => {
         harga: type.INTEGER,
         diskon: type.INTEGER,
         margin: type.FLOAT,
-        harga_jual: type.INTEGER,
+        harga_jual: type.FLOAT,
         stock: type.INTEGER
     });
 }

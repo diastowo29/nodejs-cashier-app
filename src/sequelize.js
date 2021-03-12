@@ -9,8 +9,9 @@ var sequelize_db;
 
 if (process.env.DATABASE_URL === undefined) {
 	sequelize_db = new Sequelize('cashier-app', 'postgres', 'R@hasia', {
-	  host: 'localhost',
-	  dialect: 'postgres'
+		logging: false,
+		host: 'localhost',
+		dialect: 'postgres'
 	});
 } else {
 	sequelize_db = new Sequelize(process.env.DATABASE_URL, {

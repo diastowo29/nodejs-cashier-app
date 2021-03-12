@@ -76,9 +76,9 @@ function getAllSupplier () {
 }
 
 ipcRenderer.on('all-supplier', function (event, supplier_data) {
-    console.log(supplier_data)
+    // console.log(supplier_data)
     supplier_data.forEach(supplier => {
-        console.log(supplier)
+        // console.log(supplier)
         var newRow = generateRow(supplier);
         $('#table-supplier').find('tbody').append(newRow);
     });

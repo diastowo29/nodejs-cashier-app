@@ -72,7 +72,7 @@ function doPrint () {
     totalHarga = $('#totalCell').text()
     bayar = $('#payment-input').val()
     kembalian = $('#changeRupiah').text()
-    console.log('printing...')
+    // console.log('printing...')
     ipcRenderer.send('get-many-product', barcodes, paymentMethod, productArray, totalHarga, bayar, kembalian);
 }
 
@@ -113,7 +113,7 @@ ipcRenderer.on('get-many-product', function (event, many_product, pay_method, pr
 });
 
 ipcRenderer.on('create-trx', function (event, trx, pay_method, productArray, totalHarga, bayar, kembalian) {
-    console.log(trx)
+    // console.log(trx)
     ipcRenderer.send('do_print', productArray, totalHarga, bayar, kembalian, pay_method, trx[0].dataValues.id_trx);
     ipcRenderer.send('create-trx-done', true);
 });
@@ -171,7 +171,7 @@ function qtyChange (id) {
 
 function checkTable () {
     var rowCount = $('#table-trx-tbody tr').length;
-    console.log(rowCount)
+    // console.log(rowCount)
     if (rowCount == 0) {
         var newRow = ` <tr id="no_trx_row">
             <td colspan="7">Belum ada transaksi</td>

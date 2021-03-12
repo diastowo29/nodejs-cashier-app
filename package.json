@@ -47,6 +47,7 @@
   "dependencies": {
     "@linways/table-to-excel": "^1.0.4",
     "bootstrap": "^5.0.0-beta1",
+    "electron-log": "^4.3.2",
     "electron-squirrel-startup": "^1.0.0",
     "escpos": "^3.0.0-alpha.6",
     "escpos-usb": "^3.0.0-alpha.4",
