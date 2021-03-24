@@ -85,7 +85,6 @@ function deleteThisProduct (id) {
     ipcRenderer.send('delete-product', id);
 }
 
-
 function updateThisProduct (id) {
     
     $('#update-panel').show();
@@ -160,7 +159,7 @@ function generateRow (data) {
         <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
         <button onclick="updateThisProduct(` + data.dataValues.id + `)" class="btn btn-warning"><i class="fa fa-edit"></i></button>
     </td>
-    <tr>`
+    </tr>`
     return newRow;
 }
 
@@ -176,4 +175,7 @@ ipcRenderer.on('all-product', function (event, product_data) {
         var newRow = generateRow(product);
         $('#table-product').find('tbody').append(newRow);
     });
+    $('#table-product').DataTable({
+        // paginate: false
+      });
 });

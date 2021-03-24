@@ -14,6 +14,7 @@
   <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Bootstrap core CSS -->
+  <link href="../node_modules/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">
   <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
@@ -127,7 +128,7 @@
           </div>
           <div class="col-lg-8">
             <div class="content-panel" style="padding-left: 10px; padding-right: 10px;">
-                <div class="row">
+                <div class="row" style="margin-bottom: 10px;">
                     <div class="col-md-2">
                         <label class="table-label"><i class="fa fa-angle-right"></i> Daftar Produk</label>
                     </div>
@@ -137,32 +138,32 @@
                 </div>
                 <section id="unseen">
                     <table id="table-product" class="table table-bordered table-striped table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Barcode</th>
-                            <th>Nama Produk</th>
-                            <th>Harga (Rp)</th>
-                            <th>Margin (%)</th>
-                            <th>Harga Jual (Rp)</th>
-                            <th>Diskon</th>
-                            <th>Stok</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-product-tbody">
-                        <tr>
-                            <td>993242340234123</td>
-                            <td>Kerupuk</td>
-                            <td>10000</td>
-                            <td>20</td>
-                            <td>12000</td>
-                            <td>12</td>
-                            <td>
-                                <button onclick="deleteThisProduct()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-                                <button onclick="updateThisProduct()" class="btn btn-info"><i class="fa fa-edit"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                      <thead>
+                          <tr>
+                              <th>Barcode</th>
+                              <th>Nama Produk</th>
+                              <th>Harga (Rp)</th>
+                              <th>Margin (%)</th>
+                              <th>Harga Jual (Rp)</th>
+                              <th>Diskon</th>
+                              <th>Stok</th>
+                              <th>Action</th>
+                          </tr>
+                      </thead>
+                      <tbody id="table-product-tbody">
+                          <tr>
+                              <td>993242340234123</td>
+                              <td>Kerupuk</td>
+                              <td>10000</td>
+                              <td>20</td>
+                              <td>12000</td>
+                              <td>12</td>
+                              <td>
+                                  <button onclick="deleteThisProduct()" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                  <button onclick="updateThisProduct()" class="btn btn-info"><i class="fa fa-edit"></i></button>
+                              </td>
+                          </tr>
+                      </tbody>
                     </table>
                 </section>
               </div>
@@ -242,6 +243,7 @@
     </footer>
     <!--footer end-->
   </section>
+  <script src="../node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
   <script src="js/fe-input-product.js"></script>
   <script src="js/fe-login.js"></script>
   <!--script for this page-->

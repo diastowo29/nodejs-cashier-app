@@ -12,7 +12,7 @@ function getAllTrx () {
     $("#filter-tahunan-panel").hide();
     $("#filter-advance-panel").hide();
     $("#table-trx-tbody").empty();
-    ipcRenderer.send('get-all-trx', true);
+    ipcRenderer.send('get-all-trx-cash', true);
 }
 
 function filterBulanan () {
@@ -55,7 +55,7 @@ function doFilter () {
             // console.log('daily')
             var dateInput = $('#tanggal-daily-filter').val().toString().split('-')
             filterParam = dateInput[2] + '-' + dateInput[1] + '-' + dateInput[0]
-            ipcRenderer.send('search-trx-daily', filterParam);
+            ipcRenderer.send('search-trx-daily-cash', filterParam);
             break;
         case 'MONTHLY':
             var month = '';
@@ -65,16 +65,16 @@ function doFilter () {
                 month = $('#bulan-monthly-filter').val()
             }
             filterParam = '%-' + month + '-' + $('#tahun-monthly-filter').val() 
-            ipcRenderer.send('search-trx-wild', filterParam);
+            ipcRenderer.send('search-trx-wild-cash', filterParam);
             break;
         case 'ANNUALY':
             filterParam = '%-' + $('#tahun-annualy-filter').val() 
-            ipcRenderer.send('search-trx-wild', filterParam);
+            ipcRenderer.send('search-trx-wild-cash', filterParam);
             break;
         default:
             var startDate = $('#range1-filter').val()
             var endDate = $('#range2-filter').val()
-            ipcRenderer.send('search-trx-adv', startDate, endDate);
+            ipcRenderer.send('search-trx-adv-cash', startDate, endDate);
             break;
     }
 }
@@ -87,7 +87,7 @@ function doFilterCash () {
             // console.log('daily')
             var dateInput = $('#tanggal-daily-filter').val().toString().split('-')
             filterParam = dateInput[2] + '-' + dateInput[1] + '-' + dateInput[0]
-            ipcRenderer.send('search-trx-daily', filterParam);
+            ipcRenderer.send('search-trx-daily-cash', filterParam);
             break;
         case 'MONTHLY':
             var month = '';
@@ -97,63 +97,26 @@ function doFilterCash () {
                 month = $('#bulan-monthly-filter').val()
             }
             filterParam = '%-' + month + '-' + $('#tahun-monthly-filter').val() 
-            ipcRenderer.send('search-trx-wild', filterParam);
+            ipcRenderer.send('search-trx-wild-cash', filterParam);
             break;
         case 'ANNUALY':
             filterParam = '%-' + $('#tahun-annualy-filter').val() 
-            ipcRenderer.send('search-trx-wild', filterParam);
+            ipcRenderer.send('search-trx-wild-cash', filterParam);
             break;
         default:
             var startDate = $('#range1-filter').val()
             var endDate = $('#range2-filter').val()
-            ipcRenderer.send('search-trx-adv', startDate, endDate);
+            ipcRenderer.send('search-trx-adv-cash', startDate, endDate);
             break;
     }
 }
 
-ipcRenderer.on('search-trx', function (event, trx_data) {
-    var trxSummarys = [];
-    if (trx_data.length == 0) {
-        var newRow = generateEmptyRow();
-        $('#table-trx').find('tbody').append(newRow);
-        return;
-    }
-    trx_data.forEach(trx => {
-        if (trxSummarys.length == 0) {
-            trxSummarys.push(trx.dataValues)
-        } else {
-            let trxFound = trxSummarys.find(trxSummary => 
-                trxSummary.barcode === trx.dataValues.barcode);
-            if (trxFound) {
-                trxFound.qty = trxFound.qty + trx.dataValues.qty
-            } else {
-                trxSummarys.push(trx.dataValues)
-            }
-        }
-    });
-    // console.log(trxSummarys)
-    trxSummarys.forEach(trx => {
-        var newRow = generateRow(trx);
-        $('#table-trx').find('tbody').append(newRow);
-    });
-    var totalRow = generateTotalRow(trxSummarys);
-    $('#table-trx').find('tbody').append(totalRow);
-})
 
-ipcRenderer.on('get-all-trx', function (event, trx_data) {
+ipcRenderer.on('get-all-trx-cash', function (event, trx_data) {
     var trxSummarys = [];
+    console.log(trx_data)
     trx_data.forEach(trx => {
-        if (trxSummarys.length == 0) {
-            trxSummarys.push(trx.dataValues)
-        } else {
-            let trxFound = trxSummarys.find(trxSummary => 
-                trxSummary.barcode === trx.dataValues.barcode);
-            if (trxFound) {
-                trxFound.qty = trxFound.qty + trx.dataValues.qty
-            } else {
-                trxSummarys.push(trx.dataValues)
-            }
-        }
+        trxSummarys.push(trx.dataValues)
     });
     trxSummarys.forEach(trx => {
         var newRow = generateRow(trx);
@@ -163,34 +126,53 @@ ipcRenderer.on('get-all-trx', function (event, trx_data) {
     $('#table-trx').find('tbody').append(totalRow);
 });
 
+// ipcRenderer.on('search-trx', function (event, trx_data) {
+//     var trxSummarys = [];
+//     if (trx_data.length == 0) {
+//         var newRow = generateEmptyRow();
+//         $('#table-trx').find('tbody').append(newRow);
+//         return;
+//     }
+//     trx_data.forEach(trx => {
+//         if (trxSummarys.length == 0) {
+//             trxSummarys.push(trx.dataValues)
+//         } else {
+//             let trxFound = trxSummarys.find(trxSummary => 
+//                 trxSummary.barcode === trx.dataValues.barcode);
+//             if (trxFound) {
+//                 trxFound.qty = trxFound.qty + trx.dataValues.qty
+//             } else {
+//                 trxSummarys.push(trx.dataValues)
+//             }
+//         }
+//     });
+//     // console.log(trxSummarys)
+//     trxSummarys.forEach(trx => {
+//         var newRow = generateRow(trx);
+//         $('#table-trx').find('tbody').append(newRow);
+//     });
+//     var totalRow = generateTotalRow(trxSummarys);
+//     $('#table-trx').find('tbody').append(totalRow);
+// })
+
 function generateRow (data) {
-    var margin = (data.harga * (data.margin/100))*data.qty
     var newRow = `<tr>
-    <td id="row_barcode_` + data.id + `">` + data.barcode + `</td>
-    <td id="row_nama_` + data.id + `">` + data.nama + `</td>
-    <td id="row_harga_` + data.id + `">` + data.harga + `</td>
-    <td id="row_margin_` + data.id + `">` + data.qty + `</td>
-    <td id="row_harga_jual_` + data.id + `">` + data.margin + `</td>
-    <td id="row_diskon_` + data.id + `">` + margin.toFixed(2) + `</td>
+    <td>` + data.id_trx + `</td>
+    <td>` + data.metode_pembayaran + `</td>
+    <td>` + data.pembayaran + `</td>
     </tr>`
     return newRow;
 }
 
 function generateTotalRow (summary) {
-    var qty = 0;
-    var marginFinal = 0;
+    var nominal = 0;
     summary.forEach(sum => {
-        qty = qty + sum.qty
-        var margin = parseFloat((sum.harga * (sum.margin/100))*sum.qty).toFixed(2)
-        // console.log(parseFloat(margin))
-        // console.log(marginFinal)
-        marginFinal = marginFinal + parseFloat(margin)
+        console.log(sum)
+        nominal = nominal + sum.pembayaran
     });
     var newRow = `<tr>
-    <td colspan=3>Total</td>
-    <td>` + qty + `</td>
-    <td></td>
-    <td>` + parseFloat(marginFinal).toFixed(2) + `</td>
+    <td colspan=2>Total</td>
+    <td>` + parseFloat(nominal).toFixed(2) + `</td>
     </tr>`
     return newRow;
 }
@@ -214,7 +196,7 @@ function doClearData () {
 
 function downloadTest () {
     TableToExcel.convert(document.getElementById("table-trx"), {
-        name: "report.xlsx",
+        name: "payment-report.xlsx",
         sheet: {
           name: "Sheet 1"
         }

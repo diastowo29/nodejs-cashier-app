@@ -221,6 +221,16 @@ ipcMain.on('get-all-trx', async function(event, data) {
   })
 });
 
+ipcMain.on('get-all-trx-cash', async function(event, data) {
+  trxTabel.findAll({
+    attributes: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    group: ['id_trx', 'metode_pembayaran', 'pembayaran']
+  }).then(trxs => {
+    // mappingItem(trxs);
+    mainWindow.webContents.send('get-all-trx-cash', trxs);
+  })
+});
+
 ipcMain.on('search-trx-daily', async function(event, data) {
   trxTabel.findAll({
     where: {
@@ -228,6 +238,18 @@ ipcMain.on('search-trx-daily', async function(event, data) {
     }
   }).then(trxs => {
     mappingItem(trxs);
+  })
+});
+
+ipcMain.on('search-trx-daily-cash', async function(event, data) {
+  trxTabel.findAll({
+    attributes: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    group: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    where: {
+      trx_date: data
+    }
+  }).then(trxs => {
+    mainWindow.webContents.send('get-all-trx-cash', trxs);
   })
 });
 
@@ -243,6 +265,20 @@ ipcMain.on('search-trx-wild', async function(event, data) {
   })
 });
 
+ipcMain.on('search-trx-wild-cash', async function(event, data) {
+  trxTabel.findAll({
+    attributes: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    group: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    where: {
+      trx_date: {
+        [Op.like]: data
+      } 
+    }
+  }).then(trxs => {
+    mainWindow.webContents.send('get-all-trx-cash', trxs);
+  })
+});
+
 ipcMain.on('search-trx-adv', async function(event, start, end) {
   trxTabel.findAll({
     where: {
@@ -252,6 +288,20 @@ ipcMain.on('search-trx-adv', async function(event, start, end) {
     }
   }).then(trxs => {
     mappingItem(trxs);
+  })
+});
+
+ipcMain.on('search-trx-adv-cash', async function(event, start, end) {
+  trxTabel.findAll({
+    attributes: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    group: ['id_trx', 'metode_pembayaran', 'pembayaran'],
+    where: {
+      createdAt: {
+        [Op.between]: [start, end]
+      } 
+    }
+  }).then(trxs => {
+    mainWindow.webContents.send('get-all-trx-cash', trxs);
   })
 });
 

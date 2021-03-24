@@ -140,10 +140,10 @@
                   <label for="add-supplier-button" class="hide-label">a</label>
                   <button onclick="doDownloadData()" id="add-supplier-button" class="form-control btn btn-info"><i class="fa fa-download"></i> Download</button>
                 </div> -->
-                <div class="col-md-4 offset-md-4">
+                <!-- <div class="col-md-4 offset-md-4">
                   <label for="add-supplier-button" class="hide-label">a</label>
                   <button onclick="doClearData()" id="add-supplier-button" class="form-control btn btn-danger"><i class="fa fa-trash"></i> Clear Data</button>
-              </div>
+              </div> -->
               </div>
             </div>
           </div>
@@ -158,21 +158,15 @@
                     <table id="table-trx" class="table table-bordered table-striped table-condensed">
                       <thead>
                           <tr>
-                              <th>Kode Barcode</th>
-                              <th>Nama Barang</th>
-                              <th>Harga</th>
-                              <th>Qty Terjual</th>
-                              <th>Margin (%)</th>
-                              <th>Margin (Rp)</th>
+                              <th>ID Transaksi</th>
+                              <th>Metode Pembayaran</th>
+                              <th>Nominal</th>
                           </tr>
                       </thead>
                       <tbody id="table-trx-tbody">
                           <tr>
                               <td>Supplier Kerupuk</td>
                               <td>Kerupuk</td>
-                              <td>08128379287</td>
-                              <td>08128379287</td>
-                              <td>08128379287</td>
                               <td>08128379287</td>
                           </tr>
                       </tbody>
@@ -217,7 +211,7 @@
     <!--footer end-->
   </section>
   <script type="text/javascript" src="../node_modules/@linways/table-to-excel/dist/tableToExcel.js"></script>
-  <script src="js/fe-report.js"></script>
+  <script src="js/fe-report-cash.js"></script>
   <script src="js/fe-login.js"></script>
   <script type="text/javascript" src="dist/excellentexport.js"></script>
   <!--script for this page-->
