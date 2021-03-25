@@ -78,7 +78,7 @@ function updateProduct (id) {
 }
 
 ipcRenderer.on('update-product', function (event, product) {
-    getAllProduct();
+    getAllProductUpdate();
 });
 
 function deleteThisProduct (id) {
@@ -148,29 +148,44 @@ function priceUpdateKeyInput () {
 
 function generateRow (data) {
     var newRow = `<tr>
-    <td id="row_barcode_` + data.dataValues.id + `">` + data.dataValues.barcode + `</td>
-    <td id="row_nama_` + data.dataValues.id + `">` + data.dataValues.nama_barang + `</td>
-    <td id="row_harga_` + data.dataValues.id + `">` + data.dataValues.harga + `</td>
-    <td id="row_margin_` + data.dataValues.id + `">` + data.dataValues.margin + `</td>
-    <td id="row_harga_jual_` + data.dataValues.id + `">` + data.dataValues.harga_jual + `</td>
-    <td id="row_diskon_` + data.dataValues.id + `">` + data.dataValues.diskon + `</td>
-    <td id="row_stock_` + data.dataValues.id + `">` + data.dataValues.stock + `</td>
-    <td>
-        <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-        <button onclick="updateThisProduct(` + data.dataValues.id + `)" class="btn btn-warning"><i class="fa fa-edit"></i></button>
-    </td>
+        <td id="row_barcode_` + data.dataValues.id + `">` + data.dataValues.barcode + `</td>
+        <td id="row_nama_` + data.dataValues.id + `">` + data.dataValues.nama_barang + `</td>
+        <td id="row_harga_` + data.dataValues.id + `">` + data.dataValues.harga + `</td>
+        <td id="row_margin_` + data.dataValues.id + `">` + data.dataValues.margin + `</td>
+        <td id="row_harga_jual_` + data.dataValues.id + `">` + data.dataValues.harga_jual + `</td>
+        <td id="row_diskon_` + data.dataValues.id + `">` + data.dataValues.diskon + `</td>
+        <td id="row_stock_` + data.dataValues.id + `">` + data.dataValues.stock + `</td>
+        <td>
+            <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            <button onclick="updateThisProduct(` + data.dataValues.id + `)" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+        </td>
     </tr>`
     return newRow;
 }
 
+function getAllProductUpdate () {
+    $('#update-panel').hide();
+    $('#new-panel').show();
+    ipcRenderer.send('get-all-product-update', true);
+}
+
 function getAllProduct () {
     $('#update-panel').hide();
-    $("#table-product-tbody").empty();
     ipcRenderer.send('get-all-product', true);
 }
 
+ipcRenderer.on('all-product-update', function (event, product_data) {
+    // console.log(product_data)
+    $("#table-product-tbody").empty();
+    product_data.forEach(product => {
+        var newRow = generateRow(product);
+        $('#table-product').find('tbody').append(newRow);
+    });
+});
+
 ipcRenderer.on('all-product', function (event, product_data) {
     // console.log(product_data)
+    $("#table-product-tbody").empty();
     product_data.forEach(product => {
         var newRow = generateRow(product);
         $('#table-product').find('tbody').append(newRow);

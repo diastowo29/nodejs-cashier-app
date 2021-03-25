@@ -148,6 +148,12 @@ ipcMain.on('get-all-product', async function(event, data) {
   })
 });
 
+ipcMain.on('get-all-product-update', async function(event, data) {
+  itemTabel.findAll().then(all_product => {
+    mainWindow.webContents.send('all-product-update', all_product);
+  })
+});
+
 ipcMain.on('update-product', async function(event, data, id) {
   itemTabel.update(data,{
     where: {
