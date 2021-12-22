@@ -162,9 +162,11 @@ function countTotal () {
 function qtyChange (id) {
     var hargaBasic = parseInt($('#row_harga_' + id).text());
     var qty = parseInt($('#row_input_qty_' + id).val());
-    var diskon = parseInt($('#row_diskon_' + id).text());
-    var newHargaTotal = hargaBasic * qty - diskon
+    var diskon = parseInt($('#row_diskon_hide_' + id).text());
+    var newDiskon = diskon * qty
+    var newHargaTotal = hargaBasic * qty - newDiskon
 
+    $('#row_diskon_' + id).html(newDiskon)
     $('#row_total_' + id).html(newHargaTotal)
     countTotal();
 }
@@ -188,6 +190,7 @@ function generateRow (data) {
     <td id="row_harga_` + data.dataValues.id + `">` + data.dataValues.harga_jual + `</td>
     <td id="row_qty_` + data.dataValues.id + `"><input onchange="qtyChange(` + data.dataValues.id + `)" id="row_input_qty_` + data.dataValues.id + `" type="number" class="form-control qty-input" value="` + 1 + `" ></td>
     <td id="row_diskon_` + data.dataValues.id + `">` + data.dataValues.diskon + `</td>
+    <td style='display:none;' id="row_diskon_hide_` + data.dataValues.id + `">` + data.dataValues.diskon + `</td>
     <td id="row_total_` + data.dataValues.id + `">` + hargaJualTotal + `</td>
     <td id="row_button">
         <button onclick="deleteThisProduct(` + data.dataValues.id + `)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>

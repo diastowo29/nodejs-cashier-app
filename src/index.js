@@ -286,10 +286,12 @@ ipcMain.on('search-trx-wild-cash', async function(event, data) {
 });
 
 ipcMain.on('search-trx-adv', async function(event, start, end) {
+  console.log(start)
+  console.log(end)
   trxTabel.findAll({
     where: {
       createdAt: {
-        [Op.between]: [start, end]
+        [Op.between]: [start + ' 00:00:00', end + ' 23:59:59']
       } 
     }
   }).then(trxs => {
@@ -303,7 +305,7 @@ ipcMain.on('search-trx-adv-cash', async function(event, start, end) {
     group: ['id_trx', 'metode_pembayaran', 'pembayaran'],
     where: {
       createdAt: {
-        [Op.between]: [start, end]
+        [Op.between]: [start + ' 00:00:00', end + ' 23:59:59']
       } 
     }
   }).then(trxs => {
