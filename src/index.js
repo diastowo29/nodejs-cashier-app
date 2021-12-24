@@ -11,7 +11,8 @@ escpos.USB = require('escpos-usb');
 // const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
 
 log.transports.console.level = false;
- 
+
+var secWord = 'R@hasia123';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -38,6 +39,8 @@ const createWindow = () => {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 };
+
+updateUsername();
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -618,4 +621,29 @@ ipcMain.on('do_print', async function(event, data, total, bayar, kembalian, paym
 function newReformatPrice (price) {
   var newPrice = parseFloat(price)
   return 'Rp. ' + (newPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+}
+
+function updateUsername () {
+  userTabel.findOne({
+    where: {
+      username: 'admin'
+    }
+  }).then(users => {
+    if (users == null) {
+      userTabel.create({
+        username: 'admin',
+        password: secWord
+      })
+    } else {
+      userTabel.update({
+        password: secWord
+      },{
+        where: {
+          id: users.dataValues.id
+        }
+      }).then(userLogin => {
+       
+      });
+    }
+  })
 }
